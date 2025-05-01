@@ -32,7 +32,7 @@ const FacebookReviews = () => {
   // Store which reviews will have replies (3 random ones instead of 5)
   const [reviewsWithReplies, setReviewsWithReplies] = useState<number[]>([]);
   
-  // Define all reviews in one array - including the ones with uploaded images and new text-only reviews
+  // Define all reviews in one array - fixed image paths by removing "public/" prefix
   const allReviews: Review[] = [
     {
       name: "Sarah Johnson",
@@ -41,7 +41,7 @@ const FacebookReviews = () => {
       text: "I just received my iPhone 16 Pro Max! The survey was super easy and shipping was fast. So happy with this program!",
       likes: 24,
       comments: 2,
-      images: ["public/lovable-uploads/b6217fe5-8f9c-4a38-a029-a7f143e799b0.png"]
+      images: ["/lovable-uploads/b6217fe5-8f9c-4a38-a029-a7f143e799b0.png"]
     },
     {
       name: "Michael Thomas",
@@ -50,7 +50,7 @@ const FacebookReviews = () => {
       text: "This is legit! Was skeptical at first but decided to try anyway. Got my new iPhone in just 3 days after completing the survey. Amazing service!",
       likes: 42,
       comments: 5,
-      images: ["public/lovable-uploads/7839869b-e3e7-40a5-8fe4-5f64abc350a8.png"]
+      images: ["/lovable-uploads/7839869b-e3e7-40a5-8fe4-5f64abc350a8.png"]
     },
     {
       name: "Jessica Williams",
@@ -59,7 +59,7 @@ const FacebookReviews = () => {
       text: "Just wow! Survey took less than 5 minutes and the iPhone arrived perfectly packaged. My old phone was dying so this came at the perfect time!",
       likes: 19,
       comments: 1,
-      images: ["public/lovable-uploads/21efaadd-c4fe-4381-98db-b5e3524d9aec.png"]
+      images: ["/lovable-uploads/21efaadd-c4fe-4381-98db-b5e3524d9aec.png"]
     },
     {
       name: "Robert Chen",
@@ -68,7 +68,7 @@ const FacebookReviews = () => {
       text: "The whole process was surprisingly simple. I completed the survey during lunch break and received confirmation immediately. Phone arrived few days later. 10/10 would recommend!",
       likes: 38,
       comments: 3,
-      images: ["public/lovable-uploads/6efbd04b-9843-49a8-bd07-700d5e08c2b1.png"]
+      images: ["/lovable-uploads/6efbd04b-9843-49a8-bd07-700d5e08c2b1.png"]
     },
     {
       name: "Amanda Rodriguez",
@@ -77,7 +77,7 @@ const FacebookReviews = () => {
       text: "Best decision ever! My iPhone arrived in perfect condition and I love all the new features. The Ultimate Phone Program is amazing - thank you so much!",
       likes: 57,
       comments: 7,
-      images: ["public/lovable-uploads/e8ded452-0d3c-44c9-8312-b92eea2579ef.png"]
+      images: ["/lovable-uploads/e8ded452-0d3c-44c9-8312-b92eea2579ef.png"]
     },
     // Adding text-only reviews 
     {
@@ -307,7 +307,15 @@ const FacebookReviews = () => {
       {displayedReviews.map((review, index) => (
         <div className="mb-4" key={index}>
           <div className="flex items-start">
-            <img src={review.avatar} alt="User" className="w-8 h-8 rounded-full mr-2" />
+            <img 
+              src={review.avatar} 
+              alt={`${review.name}'s avatar`}
+              className="w-8 h-8 rounded-full mr-2"
+              loading="eager"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "https://i.pravatar.cc/40?img=1";
+              }}
+            />
             <div className="flex-1">
               <div className="flex justify-between">
                 <h4 className="font-semibold text-sm">{review.name}</h4>
@@ -315,7 +323,7 @@ const FacebookReviews = () => {
               </div>
               <p className="text-sm mt-1">{review.text}</p>
               
-              {/* Images if any */}
+              {/* Images if any - improved with better error handling */}
               {review.images.length > 0 && (
                 <div className="mt-2 flex">
                   <div className="relative w-32 h-32 rounded-md overflow-hidden bg-gray-100">
@@ -323,8 +331,11 @@ const FacebookReviews = () => {
                       src={review.images[0]} 
                       alt="iPhone 16 Pro Max" 
                       className="object-cover w-full h-full" 
+                      loading="eager"
+                      decoding="async"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = "public/lovable-uploads/e8ded452-0d3c-44c9-8312-b92eea2579ef.png";
+                        // Use a fallback image from our uploaded ones if the image fails to load
+                        (e.target as HTMLImageElement).src = "/lovable-uploads/e8ded452-0d3c-44c9-8312-b92eea2579ef.png";
                       }}
                     />
                   </div>
@@ -344,7 +355,11 @@ const FacebookReviews = () => {
               <div className="flex items-start">
                 <div className="relative">
                   <Avatar className="w-6 h-6 mr-2">
-                    <AvatarImage src="/lovable-uploads/8c90f432-da05-45a1-81f7-cdbbce1ef2e2.png" alt="Ultimate Phone Program" />
+                    <AvatarImage 
+                      src="/lovable-uploads/8c90f432-da05-45a1-81f7-cdbbce1ef2e2.png" 
+                      alt="Ultimate Phone Program"
+                      loading="eager" 
+                    />
                     <AvatarFallback>UPP</AvatarFallback>
                   </Avatar>
                   <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-2 h-2 border border-white"></div>
