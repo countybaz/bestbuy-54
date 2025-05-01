@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useSurvey } from "@/contexts/SurveyContext";
@@ -14,10 +13,10 @@ const Results = () => {
   const { toast } = useToast();
   const [showingOffer, setShowingOffer] = useState(false);
   const [iphoneImages, setIphoneImages] = useState<Array<{src: string, alt: string}>>([]);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [imagesLoading, setImagesLoading] = useState(true);
   const isMobile = useIsMobile();
   
-  // Default fallback images that are guaranteed to work
+  // Guaranteed local fallback images that load instantly
   const fallbackImages = [
     {
       src: "/lovable-uploads/b58d9fe6-a7c6-416a-9594-20451eb86002.png",
@@ -29,9 +28,23 @@ const Results = () => {
     }
   ];
   
+  // Initialize with fallback images immediately
   useEffect(() => {
-    // Initialize with fallback images to ensure something always displays
+    // Load fallback images right away for immediate display
     setIphoneImages(fallbackImages);
+    
+    // Prefetch the images to ensure they're in browser cache
+    fallbackImages.forEach(img => {
+      const image = new Image();
+      image.src = img.src;
+    });
+    
+    // After a short delay, consider images loaded (even if just fallbacks)
+    const timer = setTimeout(() => {
+      setImagesLoading(false);
+    }, 300);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   const handleClaim = () => {
@@ -44,18 +57,40 @@ const Results = () => {
   
   const handleImagesFetched = (images: Array<{src: string, alt: string}>) => {
     if (images.length >= 2) {
-      // Get two random images for the display
-      const shuffled = [...images].sort(() => 0.5 - Math.random());
-      setIphoneImages(shuffled.slice(0, 2));
-      setImagesLoaded(true);
+      // Prefetch the fetched images before displaying them
+      const prefetchPromises = images.slice(0, 2).map(img => {
+        return new Promise((resolve) => {
+          const image = new Image();
+          image.onload = () => resolve(true);
+          image.onerror = () => resolve(false);
+          image.src = img.src;
+        });
+      });
+      
+      // After prefetching, update state with the new images
+      Promise.all(prefetchPromises).then(() => {
+        const shuffled = [...images].sort(() => 0.5 - Math.random());
+        setIphoneImages(shuffled.slice(0, 2));
+        setImagesLoading(false);
+      }).catch(() => {
+        // If prefetching fails, keep using fallbacks
+        setImagesLoading(false);
+      });
     } else if (images.length === 1) {
-      // If only one image is returned, duplicate it for the second slot
-      setIphoneImages([images[0], images[0]]);
-      setImagesLoaded(true);
+      // If only one image is returned, prefetch it and then duplicate
+      const image = new Image();
+      image.onload = () => {
+        setIphoneImages([images[0], images[0]]);
+        setImagesLoading(false);
+      };
+      image.onerror = () => {
+        // Keep using fallbacks if the image fails to load
+        setImagesLoading(false);
+      };
+      image.src = images[0].src;
     } else {
-      // Fallback to default images if no images were fetched
-      setIphoneImages(fallbackImages);
-      setImagesLoaded(true);
+      // Keep using fallbacks if no images were fetched
+      setImagesLoading(false);
     }
   };
 
@@ -84,28 +119,40 @@ const Results = () => {
               <IPhoneImageFetcher onComplete={handleImagesFetched} />
             </div>
             
-            {/* iPhone Images - optimized for mobile */}
+            {/* iPhone Images with optimized loading */}
             <div className="bg-white p-2 rounded-lg shadow-sm">
               <div className={`flex ${isMobile ? 'flex-col items-center' : 'flex-row justify-center'} gap-2`}>
                 <div className={`${isMobile ? 'w-[140px]' : 'w-[120px]'}`}>
                   <AspectRatio ratio={1/1}>
-                    <img 
-                      src={iphoneImages[0]?.src || fallbackImages[0].src}
-                      alt={iphoneImages[0]?.alt || fallbackImages[0].alt}
-                      className="rounded-md object-contain w-full h-full" 
-                      onError={() => handleImageError(0)}
-                    />
+                    {imagesLoading ? (
+                      <div className="w-full h-full bg-gray-100 animate-pulse rounded-md"></div>
+                    ) : (
+                      <img 
+                        src={iphoneImages[0]?.src || fallbackImages[0].src}
+                        alt={iphoneImages[0]?.alt || fallbackImages[0].alt}
+                        className="rounded-md object-contain w-full h-full" 
+                        onError={() => handleImageError(0)}
+                        loading="eager"
+                        decoding="async"
+                      />
+                    )}
                   </AspectRatio>
                 </div>
                 {!isMobile && (
                   <div className="w-[120px]">
                     <AspectRatio ratio={1/1}>
-                      <img 
-                        src={iphoneImages[1]?.src || fallbackImages[1].src} 
-                        alt={iphoneImages[1]?.alt || fallbackImages[1].alt}
-                        className="rounded-md object-contain w-full h-full" 
-                        onError={() => handleImageError(1)}
-                      />
+                      {imagesLoading ? (
+                        <div className="w-full h-full bg-gray-100 animate-pulse rounded-md"></div>
+                      ) : (
+                        <img 
+                          src={iphoneImages[1]?.src || fallbackImages[1].src} 
+                          alt={iphoneImages[1]?.alt || fallbackImages[1].alt}
+                          className="rounded-md object-contain w-full h-full" 
+                          onError={() => handleImageError(1)}
+                          loading="eager"
+                          decoding="async"
+                        />
+                      )}
                     </AspectRatio>
                   </div>
                 )}
