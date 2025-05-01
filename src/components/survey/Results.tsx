@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useSurvey } from "@/contexts/SurveyContext";
 import ProductOffer from "@/components/ProductOffer";
@@ -14,7 +14,25 @@ const Results = () => {
   const { toast } = useToast();
   const [showingOffer, setShowingOffer] = useState(false);
   const [iphoneImages, setIphoneImages] = useState<Array<{src: string, alt: string}>>([]);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const isMobile = useIsMobile();
+  
+  // Default fallback images that are guaranteed to work
+  const fallbackImages = [
+    {
+      src: "/lovable-uploads/b58d9fe6-a7c6-416a-9594-20451eb86002.png",
+      alt: "iPhone 16 Pro colors"
+    },
+    {
+      src: "/lovable-uploads/b96a5830-12f3-497d-966a-b0930df4e6d0.png", 
+      alt: "iPhone 16 Pro display"
+    }
+  ];
+  
+  useEffect(() => {
+    // Initialize with fallback images to ensure something always displays
+    setIphoneImages(fallbackImages);
+  }, []);
 
   const handleClaim = () => {
     toast({
@@ -29,9 +47,25 @@ const Results = () => {
       // Get two random images for the display
       const shuffled = [...images].sort(() => 0.5 - Math.random());
       setIphoneImages(shuffled.slice(0, 2));
+      setImagesLoaded(true);
+    } else if (images.length === 1) {
+      // If only one image is returned, duplicate it for the second slot
+      setIphoneImages([images[0], images[0]]);
+      setImagesLoaded(true);
     } else {
-      setIphoneImages(images);
+      // Fallback to default images if no images were fetched
+      setIphoneImages(fallbackImages);
+      setImagesLoaded(true);
     }
+  };
+
+  // Function to handle image errors
+  const handleImageError = (index: number) => {
+    setIphoneImages(prevImages => {
+      const newImages = [...prevImages];
+      newImages[index] = fallbackImages[index] || fallbackImages[0];
+      return newImages;
+    });
   };
 
   return (
@@ -45,7 +79,7 @@ const Results = () => {
           />
           
           <div className="mb-4 space-y-3">
-            {/* Hidden iPhone Image Fetcher */}
+            {/* Hidden iPhone Image Fetcher with callback */}
             <div className="hidden">
               <IPhoneImageFetcher onComplete={handleImagesFetched} />
             </div>
@@ -56,12 +90,10 @@ const Results = () => {
                 <div className={`${isMobile ? 'w-[140px]' : 'w-[120px]'}`}>
                   <AspectRatio ratio={1/1}>
                     <img 
-                      src={iphoneImages[0]?.src || "/lovable-uploads/b58d9fe6-a7c6-416a-9594-20451eb86002.png"} 
-                      alt="iPhone 16 Pro colors" 
+                      src={iphoneImages[0]?.src || fallbackImages[0].src}
+                      alt={iphoneImages[0]?.alt || fallbackImages[0].alt}
                       className="rounded-md object-contain w-full h-full" 
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/lovable-uploads/b58d9fe6-a7c6-416a-9594-20451eb86002.png";
-                      }}
+                      onError={() => handleImageError(0)}
                     />
                   </AspectRatio>
                 </div>
@@ -69,12 +101,10 @@ const Results = () => {
                   <div className="w-[120px]">
                     <AspectRatio ratio={1/1}>
                       <img 
-                        src={iphoneImages[1]?.src || "/lovable-uploads/b96a5830-12f3-497d-966a-b0930df4e6d0.png"} 
-                        alt="iPhone 16 Pro display" 
+                        src={iphoneImages[1]?.src || fallbackImages[1].src} 
+                        alt={iphoneImages[1]?.alt || fallbackImages[1].alt}
                         className="rounded-md object-contain w-full h-full" 
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/lovable-uploads/b96a5830-12f3-497d-966a-b0930df4e6d0.png";
-                        }}
+                        onError={() => handleImageError(1)}
                       />
                     </AspectRatio>
                   </div>
