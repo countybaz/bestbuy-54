@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useSurvey } from "@/contexts/SurveyContext";
@@ -17,14 +16,14 @@ const Results = () => {
   const [imagesLoading, setImagesLoading] = useState(true);
   const isMobile = useIsMobile();
   
-  // Guaranteed local fallback images that load instantly
+  // Guaranteed local fallback images that load instantly - with quality parameters
   const fallbackImages = [
     {
-      src: "/lovable-uploads/b58d9fe6-a7c6-416a-9594-20451eb86002.png",
+      src: "/lovable-uploads/b58d9fe6-a7c6-416a-9594-20451eb86002.png?q=60&w=200",
       alt: "iPhone 16 Pro colors"
     },
     {
-      src: "/lovable-uploads/b96a5830-12f3-497d-966a-b0930df4e6d0.png", 
+      src: "/lovable-uploads/b96a5830-12f3-497d-966a-b0930df4e6d0.png?q=60&w=200", 
       alt: "iPhone 16 Pro display"
     }
   ];
@@ -47,7 +46,7 @@ const Results = () => {
     // After all images are preloaded or after a timeout, consider images loaded
     Promise.race([
       Promise.all(preloadPromises),
-      new Promise(resolve => setTimeout(resolve, 500)) // Fallback timeout
+      new Promise(resolve => setTimeout(resolve, 300)) // Fallback timeout
     ]).then(() => {
       setImagesLoading(false);
     });
@@ -63,8 +62,25 @@ const Results = () => {
   
   const handleImagesFetched = (images: Array<{src: string, alt: string}>) => {
     if (images.length >= 2) {
+      // Add quality parameters to the images
+      const optimizedImages = images.slice(0, 2).map(img => {
+        let optimizedSrc = img.src;
+        
+        // Add quality parameter if URL supports it (like Unsplash)
+        if (optimizedSrc.includes('unsplash.com')) {
+          optimizedSrc = optimizedSrc.includes('?') 
+            ? optimizedSrc + '&w=200&auto=format&q=60' 
+            : optimizedSrc + '?w=200&auto=format&q=60';
+        }
+        
+        return {
+          ...img,
+          src: optimizedSrc
+        };
+      });
+      
       // Create an array of image preloading promises
-      const preloadPromises = images.slice(0, 2).map((img, index) => {
+      const preloadPromises = optimizedImages.map((img, index) => {
         return new Promise<boolean>((resolve) => {
           const image = new Image();
           image.onload = () => resolve(true);  // Image loaded successfully
@@ -76,7 +92,7 @@ const Results = () => {
       // Process results after all images have been attempted to load
       Promise.all(preloadPromises).then(results => {
         // Filter out any images that failed to load
-        const successfulImages = images.filter((_, index) => 
+        const successfulImages = optimizedImages.filter((_, index) => 
           index < 2 && results[index]
         );
         
@@ -93,17 +109,31 @@ const Results = () => {
         setImagesLoading(false);
       });
     } else if (images.length === 1) {
-      // If only one image is returned, verify it loads before using
+      // If only one image is returned, optimize it and verify it loads before using
+      let optimizedSrc = images[0].src;
+      
+      // Add quality parameter if URL supports it (like Unsplash)
+      if (optimizedSrc.includes('unsplash.com')) {
+        optimizedSrc = optimizedSrc.includes('?') 
+          ? optimizedSrc + '&w=200&auto=format&q=60' 
+          : optimizedSrc + '?w=200&auto=format&q=60';
+      }
+      
+      const optimizedImage = {
+        ...images[0],
+        src: optimizedSrc
+      };
+      
       const image = new Image();
       image.onload = () => {
-        setIphoneImages([images[0], fallbackImages[0]]);
+        setIphoneImages([optimizedImage, fallbackImages[0]]);
         setImagesLoading(false);
       };
       image.onerror = () => {
         // Keep using fallbacks if the image fails to load
         setImagesLoading(false);
       };
-      image.src = images[0].src;
+      image.src = optimizedImage.src;
     } else {
       // No images returned, ensure loading state is finished
       setImagesLoading(false);
@@ -141,7 +171,9 @@ const Results = () => {
                 <div className={`${isMobile ? 'w-[140px]' : 'w-[120px]'}`}>
                   <AspectRatio ratio={1/1}>
                     {imagesLoading ? (
-                      <div className="w-full h-full bg-gray-100 animate-pulse rounded-md"></div>
+                      <div className="w-full h-full bg-gray-50 rounded-md flex items-center justify-center">
+                        <div className="w-8 h-8 bg-gray-100"></div>
+                      </div>
                     ) : (
                       <img 
                         src={iphoneImages[0]?.src || fallbackImages[0].src}
@@ -150,6 +182,8 @@ const Results = () => {
                         onError={() => handleImageError(0)}
                         loading="eager"
                         decoding="async"
+                        width="140"
+                        height="140"
                         fetchPriority="high"
                       />
                     )}
@@ -159,7 +193,9 @@ const Results = () => {
                   <div className="w-[120px]">
                     <AspectRatio ratio={1/1}>
                       {imagesLoading ? (
-                        <div className="w-full h-full bg-gray-100 animate-pulse rounded-md"></div>
+                        <div className="w-full h-full bg-gray-50 rounded-md flex items-center justify-center">
+                          <div className="w-8 h-8 bg-gray-100"></div>
+                        </div>
                       ) : (
                         <img 
                           src={iphoneImages[1]?.src || fallbackImages[1].src} 
@@ -168,6 +204,8 @@ const Results = () => {
                           onError={() => handleImageError(1)}
                           loading="eager"
                           decoding="async"
+                          width="120"
+                          height="120"
                           fetchPriority="high"
                         />
                       )}

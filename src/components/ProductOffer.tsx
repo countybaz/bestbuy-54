@@ -14,8 +14,8 @@ interface IPhoneImage {
   alt: string;
 }
 
-// Guaranteed fallback image that will load instantly
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b";
+// Low quality fallback image that will load instantly
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&auto=format&q=60";
 
 const ProductOffer = ({ onClaim }: ProductOfferProps) => {
   const [selectedImage, setSelectedImage] = useState<string>(FALLBACK_IMAGE);
@@ -30,7 +30,7 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
     // Show a loading state initially but for a short time
     const timer = setTimeout(() => {
       setImageLoading(false);
-    }, 300);
+    }, 200); // Reduced from 300ms to 200ms for faster perception
     
     return () => clearTimeout(timer);
   }, []);
@@ -42,7 +42,16 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
       
       // Randomly select one image
       const randomIndex = Math.floor(Math.random() * images.length);
-      const selectedSrc = images[randomIndex].src;
+      
+      // Add quality parameters to lower image quality
+      let selectedSrc = images[randomIndex].src;
+      
+      // Add quality parameter if URL supports it (like Unsplash)
+      if (selectedSrc.includes('unsplash.com')) {
+        selectedSrc = selectedSrc.includes('?') 
+          ? selectedSrc + '&w=400&auto=format&q=60' // Lower quality and size
+          : selectedSrc + '?w=400&auto=format&q=60';
+      }
       
       const img = new Image();
       img.onload = () => {
@@ -74,16 +83,19 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
         
         {/* Display loading skeleton during image fetch */}
         {imageLoading ? (
-          <div className="w-full h-48 bg-gray-100 animate-pulse rounded-md flex items-center justify-center">
+          <div className="w-full h-48 bg-gray-100 rounded-md flex items-center justify-center">
             <p className="text-gray-500 text-sm">Loading...</p>
           </div>
         ) : (
           <img 
             src={selectedImage} 
             alt="iPhone 16 Pro Max" 
-            className="w-full h-48 object-cover rounded-md" 
+            className="w-full h-48 object-contain rounded-md bg-gray-50" 
             loading="eager"
             decoding="async"
+            fetchPriority="high"
+            width="400"
+            height="300"
             onError={() => {
               setSelectedImage(FALLBACK_IMAGE);
               setImageError(true);
