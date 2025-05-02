@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useSurvey } from "@/contexts/SurveyContext";
@@ -28,23 +29,28 @@ const Results = () => {
     }
   ];
   
-  // Initialize with fallback images immediately
+  // Initialize with fallback images and preload them immediately
   useEffect(() => {
-    // Load fallback images right away for immediate display
+    // Set fallback images right away
     setIphoneImages(fallbackImages);
     
-    // Prefetch the images to ensure they're in browser cache
-    fallbackImages.forEach(img => {
-      const image = new Image();
-      image.src = img.src;
+    // Aggressively preload all fallback images
+    const preloadPromises = fallbackImages.map(img => {
+      return new Promise<void>((resolve) => {
+        const image = new Image();
+        image.onload = () => resolve();
+        image.onerror = () => resolve(); // Continue even if load fails
+        image.src = img.src;
+      });
     });
     
-    // After a short delay, consider images loaded (even if just fallbacks)
-    const timer = setTimeout(() => {
+    // After all images are preloaded or after a timeout, consider images loaded
+    Promise.race([
+      Promise.all(preloadPromises),
+      new Promise(resolve => setTimeout(resolve, 500)) // Fallback timeout
+    ]).then(() => {
       setImagesLoading(false);
-    }, 300);
-    
-    return () => clearTimeout(timer);
+    });
   }, []);
 
   const handleClaim = () => {
@@ -57,30 +63,40 @@ const Results = () => {
   
   const handleImagesFetched = (images: Array<{src: string, alt: string}>) => {
     if (images.length >= 2) {
-      // Prefetch the fetched images before displaying them
-      const prefetchPromises = images.slice(0, 2).map(img => {
-        return new Promise((resolve) => {
+      // Create an array of image preloading promises
+      const preloadPromises = images.slice(0, 2).map((img, index) => {
+        return new Promise<boolean>((resolve) => {
           const image = new Image();
-          image.onload = () => resolve(true);
-          image.onerror = () => resolve(false);
+          image.onload = () => resolve(true);  // Image loaded successfully
+          image.onerror = () => resolve(false); // Image failed to load
           image.src = img.src;
         });
       });
       
-      // After prefetching, update state with the new images
-      Promise.all(prefetchPromises).then(() => {
-        const shuffled = [...images].sort(() => 0.5 - Math.random());
-        setIphoneImages(shuffled.slice(0, 2));
-        setImagesLoading(false);
-      }).catch(() => {
-        // If prefetching fails, keep using fallbacks
+      // Process results after all images have been attempted to load
+      Promise.all(preloadPromises).then(results => {
+        // Filter out any images that failed to load
+        const successfulImages = images.filter((_, index) => 
+          index < 2 && results[index]
+        );
+        
+        if (successfulImages.length > 0) {
+          // If we got at least some successful images, use them
+          setIphoneImages([
+            ...successfulImages,
+            // Fill any missing spots with fallback images
+            ...(successfulImages.length < 2 ? 
+                fallbackImages.slice(0, 2 - successfulImages.length) : [])
+          ]);
+        }
+        // Always mark loading as done
         setImagesLoading(false);
       });
     } else if (images.length === 1) {
-      // If only one image is returned, prefetch it and then duplicate
+      // If only one image is returned, verify it loads before using
       const image = new Image();
       image.onload = () => {
-        setIphoneImages([images[0], images[0]]);
+        setIphoneImages([images[0], fallbackImages[0]]);
         setImagesLoading(false);
       };
       image.onerror = () => {
@@ -89,16 +105,16 @@ const Results = () => {
       };
       image.src = images[0].src;
     } else {
-      // Keep using fallbacks if no images were fetched
+      // No images returned, ensure loading state is finished
       setImagesLoading(false);
     }
   };
 
-  // Function to handle image errors
+  // Function to handle image errors - immediately swap with fallback
   const handleImageError = (index: number) => {
     setIphoneImages(prevImages => {
       const newImages = [...prevImages];
-      newImages[index] = fallbackImages[index] || fallbackImages[0];
+      newImages[index] = fallbackImages[index % fallbackImages.length];
       return newImages;
     });
   };
@@ -130,10 +146,11 @@ const Results = () => {
                       <img 
                         src={iphoneImages[0]?.src || fallbackImages[0].src}
                         alt={iphoneImages[0]?.alt || fallbackImages[0].alt}
-                        className="rounded-md object-contain w-full h-full" 
+                        className="rounded-md object-contain w-full h-full"
                         onError={() => handleImageError(0)}
                         loading="eager"
                         decoding="async"
+                        fetchPriority="high"
                       />
                     )}
                   </AspectRatio>
@@ -151,6 +168,7 @@ const Results = () => {
                           onError={() => handleImageError(1)}
                           loading="eager"
                           decoding="async"
+                          fetchPriority="high"
                         />
                       )}
                     </AspectRatio>

@@ -14,14 +14,48 @@ interface IPhoneImage {
   alt: string;
 }
 
+// Guaranteed fallback image that will load instantly
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b";
+
 const ProductOffer = ({ onClaim }: ProductOfferProps) => {
-  const [selectedImage, setSelectedImage] = useState<string>("https://images.unsplash.com/photo-1488590528505-98d2b5aba04b");
+  const [selectedImage, setSelectedImage] = useState<string>(FALLBACK_IMAGE);
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
+  const [imageError, setImageError] = useState<boolean>(false);
+  
+  // Preload the fallback image on component mount
+  useEffect(() => {
+    const img = new Image();
+    img.src = FALLBACK_IMAGE;
+    
+    // Show a loading state initially but for a short time
+    const timer = setTimeout(() => {
+      setImageLoading(false);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   const handleImagesFetched = (images: IPhoneImage[]) => {
     if (images.length > 0) {
+      // Prefetch the chosen image before displaying
+      setImageLoading(true);
+      
       // Randomly select one image
       const randomIndex = Math.floor(Math.random() * images.length);
-      setSelectedImage(images[randomIndex].src);
+      const selectedSrc = images[randomIndex].src;
+      
+      const img = new Image();
+      img.onload = () => {
+        setSelectedImage(selectedSrc);
+        setImageLoading(false);
+        setImageError(false);
+      };
+      img.onerror = () => {
+        setSelectedImage(FALLBACK_IMAGE);
+        setImageLoading(false);
+        setImageError(true);
+      };
+      img.src = selectedSrc;
     }
   };
   
@@ -38,16 +72,24 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
           <IPhoneImageFetcher onComplete={handleImagesFetched} />
         </div>
         
-        {/* Display the selected image */}
-        <img 
-          src={selectedImage} 
-          alt="iPhone 16 Pro Max" 
-          className="w-full h-48 object-cover rounded-md" 
-          onError={(e) => {
-            // Fallback image if the selected one fails to load
-            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b";
-          }}
-        />
+        {/* Display loading skeleton during image fetch */}
+        {imageLoading ? (
+          <div className="w-full h-48 bg-gray-100 animate-pulse rounded-md flex items-center justify-center">
+            <p className="text-gray-500 text-sm">Loading...</p>
+          </div>
+        ) : (
+          <img 
+            src={selectedImage} 
+            alt="iPhone 16 Pro Max" 
+            className="w-full h-48 object-cover rounded-md" 
+            loading="eager"
+            decoding="async"
+            onError={() => {
+              setSelectedImage(FALLBACK_IMAGE);
+              setImageError(true);
+            }}
+          />
+        )}
       </div>
 
       <div className="mb-6">
