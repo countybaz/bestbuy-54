@@ -5,23 +5,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ultimate Phone Program</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+    <meta name="description" content="Get your iPhone 16 Pro Max with the Ultimate Phone Program!" />
+    <meta name="author" content="Ultimate Phone Program" />
     
+    <link rel="preload" href="/lovable-uploads/8c90f432-da05-45a1-81f7-cdbbce1ef2e2.png" as="image" type="image/png" fetchpriority="high" />
     <link rel="icon" href="/lovable-uploads/8c90f432-da05-45a1-81f7-cdbbce1ef2e2.png" type="image/png">
 
-    <meta property="og:title" content="Ultimate Phone Program" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    <meta property="og:title" content="Ultimate Phone Program - Get Your iPhone 16!" />
+    <meta property="og:description" content="Take our quick survey and qualify for a new iPhone 16 Pro Max" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    
+    <!-- Critical CSS inline - minimal styles needed for initial render -->
+    <style>
+      body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;line-height:1.5}
+      .header{height:96px;display:flex;align-items:center;justify-content:center;background:white;box-shadow:0 1px 2px rgba(0,0,0,0.05)}
+      .loading{display:flex;justify-content:center;align-items:center;height:100vh;width:100%}
+      .spinner{width:40px;height:40px;border:3px solid rgba(0,0,0,0.1);border-radius:50%;border-top-color:#3b82f6;animation:spin 1s linear infinite}
+      @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    </style>
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Initial loading state will be replaced by React -->
+      <div class="loading">
+        <div class="spinner"></div>
+      </div>
+    </div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>

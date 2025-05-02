@@ -1,72 +1,49 @@
-
 import { Button } from "@/components/ui/button";
 import Timer from "@/components/Timer";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
-import IPhoneImageFetcher from "@/components/IPhoneImageFetcher";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProductOfferProps {
   onClaim: () => void;
 }
 
-interface IPhoneImage {
-  src: string;
-  alt: string;
-}
-
-// Low quality fallback image that will load instantly
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&auto=format&q=60";
+// Tiny, extremely low quality fallback image that will load instantly
+const FALLBACK_IMAGE = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAgACADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwC/FEsjZLE+lNnt0kPPAPrUkcQSPHc96ryIVfPrWDZvFEByqEA9KaS7d8U+RXcZWoT5gOPXpSLQpG5uO9NNuN3ymnZlUANg5OKmCAgc9qV0NXM6e3CnABzTTb7RzgfWtGVFHTkVBI4yQFJ9KTTNCB9vy/KD60+OMkEEYFShJs/dFTxmRRww/KlctJEbxKE4FUG+Vjk8VpOhkXGAfrVRYAJMFeTWM4O5tFkaZDDBJ96uROq4GciozheMDFQMrhs+tEIuI5SVouLod+K8+ttdjjJAhkJ9SRXaXD5t3Havm7XvFjadqbRqwdVOFYdDVpXZDdj1RpFJ+UkGo5JE5zz9K8Usvil4htJA32kXCjosg/xrrbH4k6FqECNcxTWk5HzKw3KPof8AGoqQlHdDjJM//9k=";
 
 const ProductOffer = ({ onClaim }: ProductOfferProps) => {
   const [selectedImage, setSelectedImage] = useState<string>(FALLBACK_IMAGE);
   const [imageLoading, setImageLoading] = useState<boolean>(true);
-  const [imageError, setImageError] = useState<boolean>(false);
   
   // Preload the fallback image on component mount
   useEffect(() => {
-    const img = new Image();
-    img.src = FALLBACK_IMAGE;
+    // Define the iPhone image we want to load (optimized for size/quality)
+    const optimizedImageUrl = "/lovable-uploads/b58d9fe6-a7c6-416a-9594-20451eb86002.png?w=300&q=30";
     
-    // Show a loading state initially but for a short time
+    // Start with the tiny placeholder
+    setSelectedImage(FALLBACK_IMAGE);
+    
+    // Load the optimized image
+    const img = new Image();
+    img.onload = () => {
+      setSelectedImage(optimizedImageUrl);
+      setImageLoading(false);
+    };
+    img.onerror = () => {
+      // Keep using the tiny placeholder on error
+      setImageLoading(false);
+    };
+    
+    // Set src after defining handlers
+    img.src = optimizedImageUrl;
+    
+    // Set a timeout to stop showing loading state regardless
     const timer = setTimeout(() => {
       setImageLoading(false);
-    }, 200); // Reduced from 300ms to 200ms for faster perception
+    }, 300);
     
     return () => clearTimeout(timer);
   }, []);
-  
-  const handleImagesFetched = (images: IPhoneImage[]) => {
-    if (images.length > 0) {
-      // Prefetch the chosen image before displaying
-      setImageLoading(true);
-      
-      // Randomly select one image
-      const randomIndex = Math.floor(Math.random() * images.length);
-      
-      // Add quality parameters to lower image quality
-      let selectedSrc = images[randomIndex].src;
-      
-      // Add quality parameter if URL supports it (like Unsplash)
-      if (selectedSrc.includes('unsplash.com')) {
-        selectedSrc = selectedSrc.includes('?') 
-          ? selectedSrc + '&w=400&auto=format&q=60' // Lower quality and size
-          : selectedSrc + '?w=400&auto=format&q=60';
-      }
-      
-      const img = new Image();
-      img.onload = () => {
-        setSelectedImage(selectedSrc);
-        setImageLoading(false);
-        setImageError(false);
-      };
-      img.onerror = () => {
-        setSelectedImage(FALLBACK_IMAGE);
-        setImageLoading(false);
-        setImageError(true);
-      };
-      img.src = selectedSrc;
-    }
-  };
   
   return (
     <div className="border border-gray-200 rounded-lg shadow-lg p-6 max-w-md mx-auto bg-white">
@@ -76,16 +53,9 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
       </div>
 
       <div className="mb-6">
-        {/* Hidden image fetcher that provides images */}
-        <div className="hidden">
-          <IPhoneImageFetcher onComplete={handleImagesFetched} />
-        </div>
-        
         {/* Display loading skeleton during image fetch */}
         {imageLoading ? (
-          <div className="w-full h-48 bg-gray-100 rounded-md flex items-center justify-center">
-            <p className="text-gray-500 text-sm">Loading...</p>
-          </div>
+          <Skeleton className="w-full h-48" />
         ) : (
           <img 
             src={selectedImage} 
@@ -94,12 +64,8 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
             loading="eager"
             decoding="async"
             fetchPriority="high"
-            width="400"
-            height="300"
-            onError={() => {
-              setSelectedImage(FALLBACK_IMAGE);
-              setImageError(true);
-            }}
+            width="300"
+            height="225"
           />
         )}
       </div>

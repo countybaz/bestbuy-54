@@ -3,6 +3,10 @@ import { SurveyProvider, useSurvey } from "@/contexts/SurveyContext";
 import SurveyContainer from "@/components/SurveyContainer";
 import FAQ from "@/components/FAQ";
 import { Link } from "react-router-dom";
+import { lazy, Suspense } from "react";
+
+// Lazy-load FAQ component since it's not needed for initial render
+const LazyFAQ = lazy(() => import("@/components/FAQ"));
 
 const Index = () => {
   return (
@@ -67,10 +71,16 @@ const HeaderContent = () => {
         src="/lovable-uploads/8c90f432-da05-45a1-81f7-cdbbce1ef2e2.png" 
         alt="Ultimate Phone Program Logo" 
         className="h-20 md:h-24 mr-4"
+        width="96"
+        height="96"
+        loading="eager"
+        fetchPriority="high"
       />
       <h1 className="text-xl font-bold text-blue-600">Ultimate Phone Program</h1>
       <div className="ml-4">
-        <FAQ />
+        <Suspense fallback={<div className="w-8 h-8" />}>
+          <LazyFAQ />
+        </Suspense>
       </div>
     </div>
   );
