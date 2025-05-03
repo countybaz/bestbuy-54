@@ -71,10 +71,18 @@ const Step5 = () => {
       </div>
 
       <div className="w-full bg-gray-100 rounded-md h-2 mt-6">
-        <div className="bg-blue-600 h-2 rounded-md animate-pulse"></div>
+        <div className="bg-blue-600 h-2 rounded-md animate-pulse" style={{ width: '100%' }}></div>
       </div>
       
-      <p className="text-center text-sm text-gray-500 mt-2">Processing your information...</p>
+      <p className="text-center text-sm text-gray-500 mt-2 mb-6">Processing your information...</p>
+      
+      {/* Added manual continue button for mobile users */}
+      <Button 
+        onClick={goToNextStep} 
+        className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg fixed bottom-4 left-4 right-4 md:relative md:bottom-auto md:left-auto md:right-auto md:py-4 z-10 max-w-full mx-auto shadow-lg md:shadow-none"
+      >
+        Continue
+      </Button>
     </div>
   );
 };

@@ -43,7 +43,7 @@ const SurveyContainer = () => {
   }, [currentStep]);
 
   return (
-    <div className="w-full max-w-lg mx-auto px-4 py-8">
+    <div className="w-full max-w-lg mx-auto px-4 py-8 pb-20 md:pb-8">
       {/* Timer only visible during active survey steps (not on start screen) */}
       {currentStep > 0 && currentStep <= totalSteps && <Timer minutes={3} />}
       

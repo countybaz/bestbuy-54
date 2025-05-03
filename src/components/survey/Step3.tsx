@@ -47,7 +47,7 @@ const Step3 = () => {
       <Button 
         onClick={handleNext} 
         disabled={!selected}
-        className="w-full bg-blue-600 hover:bg-blue-700"
+        className="w-full bg-blue-600 hover:bg-blue-700 py-6 md:py-4 text-lg shadow-lg md:shadow-none fixed bottom-4 left-4 right-4 md:relative md:bottom-auto md:left-auto md:right-auto z-10 max-w-full mx-auto"
       >
         Continue
       </Button>
