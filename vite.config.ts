@@ -37,8 +37,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      fastRefresh: true, 
-      // Improve hydration speed
+      // Remove fastRefresh as it's not a valid option
       devTarget: 'es2022',
       tsDecorators: true,
     }),

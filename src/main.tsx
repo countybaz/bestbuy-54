@@ -10,10 +10,12 @@ const hideLoadingSpinner = () => {
     rootElement.classList.add('root-loaded');
     
     // Also remove any loading elements directly
-    const loadingEl = document.querySelector('.loading');
-    if (loadingEl && loadingEl.parentNode) {
-      loadingEl.parentNode.removeChild(loadingEl);
-    }
+    const loadingElements = document.querySelectorAll('.loading');
+    loadingElements.forEach(el => {
+      if (el.parentNode) {
+        el.parentNode.removeChild(el);
+      }
+    });
   }
 };
 
