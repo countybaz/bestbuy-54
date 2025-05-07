@@ -4,39 +4,28 @@ import Timer from "@/components/Timer";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProductOfferProps {
   onClaim: () => void;
 }
 
-// Tiny, extremely low quality fallback image that will load instantly
-const FALLBACK_IMAGE = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAgACADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwC/FEsjZLE+lNnt0kPPAPrUkcQSPHc96ryIVfPrWDZvFEByqEA9KaS7d8U+RXcZWoT5gOPXpSLQpG5uO9NNuN3ymnZlUANg5OKmCAgc9qV0NXM6e3CnABzTTb7RzgfWtGVFHTkVBI4yQFJ9KTTNCB9vy/KD60+OMkEEYFTxmRRww/KlctJEbxKE4FUG+Vjk8VpOhkXGAfrVRYAJMFeTWM4O5tFkaZDDBJ96uROq4GciozheMDFQMrhs+tEIuI5SVouLod+K8+ttdjjJAhkJ9SRXaXD5t3Havm7XvFjadqbRqwdVOFYdDVpXZDdj1RpFJ+UkGo5JE5zz9K8Usvil4htJA32kXCjosg/xrrbH4k6FqECNcxTWk5HzKw3KPof8AGoqQlHdDjJM//9k=";
-
 const ProductOffer = ({ onClaim }: ProductOfferProps) => {
-  const [selectedImage, setSelectedImage] = useState<string>(FALLBACK_IMAGE);
   const [imageLoading, setImageLoading] = useState<boolean>(true);
+  const isMobile = useIsMobile();
   
-  // Preload the fallback image on component mount
   useEffect(() => {
-    // Define the gift card image we want to load (Best Buy gift card)
-    const optimizedImageUrl = "/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png?w=300&q=30";
-    
-    // Start with the tiny placeholder
-    setSelectedImage(FALLBACK_IMAGE);
-    
-    // Load the optimized image
+    // Preload the image
     const img = new Image();
     img.onload = () => {
-      setSelectedImage(optimizedImageUrl);
       setImageLoading(false);
     };
     img.onerror = () => {
-      // Keep using the tiny placeholder on error
       setImageLoading(false);
     };
     
     // Set src after defining handlers
-    img.src = optimizedImageUrl;
+    img.src = "/lovable-uploads/647e8416-3a63-4d9b-8be0-5dc82c427cb9.png";
     
     // Set a timeout to stop showing loading state regardless
     const timer = setTimeout(() => {
@@ -47,47 +36,49 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
   }, []);
   
   return (
-    <div className="border border-gray-200 rounded-lg shadow-lg p-6 max-w-md mx-auto bg-white">
+    <div className="border border-gray-200 rounded-lg shadow-lg p-4 md:p-6 max-w-md mx-auto bg-white">
       <div className="text-center mb-4">
         <h3 className="text-xl font-bold text-gray-900">Congratulations!</h3>
         <p className="text-green-600 font-medium">You've qualified for our special offer!</p>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-5">
         {/* Display loading skeleton during image fetch */}
         {imageLoading ? (
-          <Skeleton className="w-full h-48" />
+          <Skeleton className="w-full h-40 md:h-48" />
         ) : (
-          <img 
-            src={selectedImage} 
-            alt="$500 Best Buy Gift Card" 
-            className="w-full h-48 object-contain rounded-md bg-gray-50" 
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-            width="300"
-            height="225"
-          />
+          <div className="flex justify-center">
+            <img 
+              src="/lovable-uploads/647e8416-3a63-4d9b-8be0-5dc82c427cb9.png" 
+              alt="$500 Best Buy Gift Card" 
+              className={`${isMobile ? 'w-4/5' : 'w-3/4'} h-auto object-contain rounded-md`}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              width="300"
+              height="188"
+            />
+          </div>
         )}
       </div>
 
-      <div className="mb-6">
-        <h4 className="font-bold text-lg mb-2">$500 Best Buy Gift Card</h4>
+      <div className="mb-5">
+        <h4 className="font-bold text-lg mb-2 text-center">$500 Best Buy Gift Card</h4>
         <div className="flex items-center mb-1">
-          <Check className="h-4 w-4 text-green-500 mr-2" />
+          <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
           <span className="text-gray-700">Redeemable in-store or online</span>
         </div>
         <div className="flex items-center mb-1">
-          <Check className="h-4 w-4 text-green-500 mr-2" />
+          <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
           <span className="text-gray-700">Shop thousands of products</span>
         </div>
         <div className="flex items-center mb-1">
-          <Check className="h-4 w-4 text-green-500 mr-2" />
+          <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
           <span className="text-gray-700">Valid at all Best Buy locations</span>
         </div>
       </div>
 
-      <div className="mb-6 text-center">
+      <div className="mb-5 text-center">
         <div className="flex items-center justify-center">
           <span className="text-2xl font-bold text-green-600">$500.00 VALUE</span>
         </div>
@@ -98,9 +89,9 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
 
       <Button 
         onClick={onClaim} 
-        className="w-full py-6 text-lg font-bold bg-yellow-400 hover:bg-yellow-500 text-blue-900 cta-button"
+        className="w-full py-5 md:py-6 text-lg font-bold bg-green-600 hover:bg-green-700 text-white shadow-md cta-button"
       >
-        CLAIM NOW
+        CONTINUE TO OFFER
       </Button>
 
       <p className="text-xs text-center text-gray-500 mt-4">

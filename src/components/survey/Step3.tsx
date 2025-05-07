@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import SurveyHeader from "@/components/SurveyHeader";
 import SurveyOption from "@/components/SurveyOption";
 import { useSurvey } from "@/contexts/SurveyContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Step3 = () => {
   const { goToNextStep, setAnswer } = useSurvey();
   const [selected, setSelected] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const handleNext = () => {
     if (selected) {
@@ -17,7 +19,7 @@ const Step3 = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto px-4">
       <SurveyHeader 
         title=""
         subtitle="We're making progress!"
@@ -44,13 +46,17 @@ const Step3 = () => {
         </div>
       </div>
 
-      <Button 
-        onClick={handleNext} 
-        disabled={!selected}
-        className="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-900 py-6 md:py-4 text-lg font-bold shadow-lg md:shadow-none fixed bottom-4 left-4 right-4 md:relative md:bottom-auto md:left-auto md:right-auto z-10 max-w-full mx-auto cta-button"
-      >
-        Continue
-      </Button>
+      <div className={isMobile ? "sticky bottom-4 z-10 mt-4 px-4" : ""}>
+        <Button 
+          onClick={handleNext} 
+          disabled={!selected}
+          className="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-900 py-6 text-lg font-bold shadow-lg max-w-full mx-auto"
+        >
+          Continue
+        </Button>
+      </div>
+      
+      {isMobile && <div className="h-16"></div>}
     </div>
   );
 };

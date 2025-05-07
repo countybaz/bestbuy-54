@@ -4,6 +4,7 @@ import SurveyContainer from "@/components/SurveyContainer";
 import FAQ from "@/components/FAQ";
 import { Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Lazy-load FAQ component since it's not needed for initial render
 const LazyFAQ = lazy(() => import("@/components/FAQ"));
@@ -57,6 +58,7 @@ const Index = () => {
 // Create a separate component for the header content
 const HeaderContent = () => {
   const { goToStep } = useSurvey();
+  const isMobile = useIsMobile();
   
   const handleLogoClick = () => {
     goToStep(0);
@@ -67,16 +69,18 @@ const HeaderContent = () => {
       className="flex items-center cursor-pointer" 
       onClick={handleLogoClick}
     >
-      <img 
-        src="/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png" 
-        alt="Best Buy Review Program Logo" 
-        className="h-20 md:h-24 mr-4"
-        width="96"
-        height="96"
-        loading="eager"
-        fetchPriority="high"
-      />
-      <h1 className="text-xl font-bold text-yellow-400">Best Buy Review Program</h1>
+      <div className="h-16 w-16 md:h-18 md:w-18 mr-3 flex items-center justify-center">
+        <img 
+          src="/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png" 
+          alt="Best Buy Review Program Logo" 
+          className="h-auto w-full object-contain"
+          width="64"
+          height="64"
+          loading="eager"
+          fetchPriority="high"
+        />
+      </div>
+      <h1 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-yellow-400`}>Best Buy Review Program</h1>
       <div className="ml-4">
         <Suspense fallback={<div className="w-8 h-8" />}>
           <LazyFAQ />

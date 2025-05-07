@@ -2,9 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const RejectionPage = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
   const handleTryAgain = () => {
     // Navigate back to the main page
@@ -15,12 +17,20 @@ const RejectionPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       <header className="shadow-sm py-2 bg-blue-900 h-24 flex items-center">
         <div className="container mx-auto px-4 flex items-center justify-center">
-          <img 
-            src="/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png" 
-            alt="Best Buy Review Program Logo" 
-            className="h-20 md:h-24 mr-4"
-          />
-          <h1 className="text-xl font-bold text-yellow-400">Best Buy Review Program</h1>
+          <div className="h-16 w-16 md:h-18 md:w-18 mr-3 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png" 
+              alt="Best Buy Review Program Logo" 
+              className="h-auto w-full object-contain"
+              width="64"
+              height="64"
+              loading="eager"
+              fetchPriority="high"
+            />
+          </div>
+          <h1 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-yellow-400`}>
+            Best Buy Review Program
+          </h1>
         </div>
       </header>
       
