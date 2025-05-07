@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  // Netlify specific adjustments - set base for proper path resolution
+  // Netlify specific adjustments
   base: '/',
   // Optimize build output
   build: {
@@ -18,6 +18,8 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     // For Netlify performance
     chunkSizeWarningLimit: 1000,
+    cssCodeSplit: true,
+    // Disable code splitting for smaller apps
     rollupOptions: {
       output: {
         manualChunks: {
@@ -30,14 +32,26 @@ export default defineConfig(({ mode }) => ({
         },
       },
     },
+    // Speed up Netlify build
+    target: 'es2018',
   },
   plugins: [
-    react(),
+    react({
+      fastRefresh: true, 
+      // Improve hydration speed
+      devTarget: 'es2022',
+      tsDecorators: true,
+    }),
     mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  // Optimize for Netlify
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
+    exclude: ['lovable-tagger'],
   },
 }));
