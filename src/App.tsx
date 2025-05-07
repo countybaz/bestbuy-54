@@ -1,5 +1,5 @@
 
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -35,44 +35,25 @@ const PageLoader = () => (
   </div>
 );
 
-const App = () => {
-  // Hide loading spinner when App component mounts
-  useEffect(() => {
-    // Mark as loaded to remove spinner
-    const rootElement = document.getElementById("root");
-    if (rootElement) {
-      rootElement.classList.add('root-loaded');
-    }
-    
-    // Remove any dedicated loading elements
-    const loadingElements = document.getElementsByClassName('loading');
-    for (let i = 0; i < loadingElements.length; i++) {
-      if (loadingElements[i].parentNode) {
-        loadingElements[i].classList.add('force-hide');
-      }
-    }
-  }, []);
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/rejection" element={<RejectionPage />} />
-              <Route path="/terms" element={<TermsAndConditions />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/non-affiliation" element={<NonAffiliationDisclaimer />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
-};
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/rejection" element={<RejectionPage />} />
+            <Route path="/terms" element={<TermsAndConditions />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/non-affiliation" element={<NonAffiliationDisclaimer />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;
