@@ -1,7 +1,6 @@
 
 import { SurveyProvider, useSurvey } from "@/contexts/SurveyContext";
 import SurveyContainer from "@/components/SurveyContainer";
-import FAQ from "@/components/FAQ";
 import { Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -77,6 +76,7 @@ const HeaderContent = () => {
           width="64"
           height="64"
           loading="eager"
+          // Fix case sensitivity for fetchPriority
           fetchPriority="high"
         />
       </div>

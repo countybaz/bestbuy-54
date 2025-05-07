@@ -41,6 +41,11 @@ jobs:
           node-version: '18'
           cache: 'npm'
           
+      - name: Setup environment
+        run: |
+          echo "NODE_OPTIONS=--max_old_space_size=4096" >> $GITHUB_ENV
+          echo "GENERATE_SOURCEMAP=false" >> $GITHUB_ENV
+          
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
@@ -59,6 +64,11 @@ jobs:
           # Force CI=false so warnings don't fail the build
           CI: false
         
+      - name: Prepare for deployment
+        run: |
+          # Ensure _redirects file exists for SPA routing
+          echo "/* /index.html 200" > ./dist/_redirects
+          
       - name: Setup Pages
         uses: actions/configure-pages@v5
         

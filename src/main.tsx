@@ -3,34 +3,28 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 
-// Function to remove loading spinner
+// Remove loading spinner and show content
 const hideLoadingSpinner = () => {
-  console.log("Attempting to hide loading spinner");
+  console.log("Removing loading spinner");
   const rootElement = document.getElementById("root");
   if (rootElement) {
     rootElement.classList.add('root-loaded');
     
-    // Try multiple selectors to ensure we catch all loading elements
+    // Try multiple methods to remove loading elements
     try {
-      // Remove by class
+      // By class
       const loadingElements = document.querySelectorAll('.loading');
       loadingElements.forEach(el => {
-        console.log("Removing loading element by class");
         if (el.parentNode) {
           el.parentNode.removeChild(el);
-        } else {
-          el.classList.add('force-hide');
         }
       });
       
-      // Also try to remove by data attribute if present
+      // By data attribute
       const spinnerElements = document.querySelectorAll('[data-loading]');
       spinnerElements.forEach(el => {
-        console.log("Removing loading element by data attribute");
         if (el.parentNode) {
           el.parentNode.removeChild(el);
-        } else {
-          el.classList.add('force-hide');
         }
       });
     } catch (e) {
@@ -39,32 +33,37 @@ const hideLoadingSpinner = () => {
   }
 };
 
-// Create root before doing anything else
-console.log("Initializing React application");
-const rootElement = document.getElementById("root");
-if (!rootElement) {
-  console.error("Root element not found!");
-} else {
+// Initialize app immediately
+const init = () => {
+  const rootElement = document.getElementById("root");
+  if (!rootElement) {
+    console.error("Root element not found!");
+    return;
+  }
+  
   try {
-    // Create root and render app
+    // Create root
     const root = createRoot(rootElement);
     
-    // Render the app
+    // Render app
     root.render(<App />);
-    console.log("App rendered successfully");
     
-    // Mark as loaded to remove spinner immediately
+    // Remove loading spinner after render
     hideLoadingSpinner();
     
-    // Also set timers at different intervals as failsafes
-    setTimeout(hideLoadingSpinner, 500);
-    setTimeout(hideLoadingSpinner, 1500);
-    setTimeout(hideLoadingSpinner, 3000);
-    
-    // Add event listener for when content is fully loaded
-    window.addEventListener('load', hideLoadingSpinner);
-    document.addEventListener('DOMContentLoaded', hideLoadingSpinner);
+    console.log("App rendered successfully");
   } catch (error) {
     console.error("Failed to render React application:", error);
   }
-}
+};
+
+// Run init immediately
+init();
+
+// Also set backup timeouts to ensure spinner is removed
+setTimeout(hideLoadingSpinner, 500);
+setTimeout(hideLoadingSpinner, 1500);
+
+// Add standard event listeners
+window.addEventListener('load', hideLoadingSpinner);
+document.addEventListener('DOMContentLoaded', hideLoadingSpinner);

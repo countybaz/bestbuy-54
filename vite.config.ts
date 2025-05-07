@@ -12,33 +12,27 @@ export default defineConfig(({ mode }) => ({
   },
   // Netlify specific adjustments
   base: '/',
-  // Optimize build output
+  // Simplified build settings that work reliably on Netlify
   build: {
-    minify: 'esbuild', // Always use esbuild for minification
+    minify: true,
     sourcemap: false,
-    // For Netlify performance
-    chunkSizeWarningLimit: 1000,
-    cssCodeSplit: true,
-    // Very simplified chunking for better Netlify compatibility
+    // Disable chunk size warnings
+    chunkSizeWarningLimit: 1600,
+    // Simple and reliable chunking strategy for Netlify
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Simple chunking strategy for Netlify
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'vendor-react';
-            }
             return 'vendor';
           }
-        },
-      },
+        }
+      }
     },
-    // Use stable target for Netlify
-    target: 'es2019',
+    // Compatible target for wider browser support
+    target: 'es2018',
   },
   plugins: [
     react({
-      devTarget: 'es2022',
       tsDecorators: true,
     }),
     mode === 'development' && componentTagger(),
@@ -48,7 +42,7 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Optimize for Netlify
+  // Optimize dependencies
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
     exclude: ['lovable-tagger'],
