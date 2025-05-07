@@ -14,30 +14,25 @@ export default defineConfig(({ mode }) => ({
   base: '/',
   // Optimize build output
   build: {
-    minify: mode === 'production' ? 'terser' : 'esbuild',
+    minify: mode === 'production' ? 'esbuild' : false, // Using esbuild instead of terser for better compatibility
     sourcemap: false,
     // For Netlify performance
     chunkSizeWarningLimit: 1000,
     cssCodeSplit: true,
-    // Disable code splitting for smaller apps
+    // Simplified chunking for better Netlify compatibility
     rollupOptions: {
       output: {
         manualChunks: {
-          // Split React dependencies into a separate chunk
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          // UI components
-          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-popover', '@radix-ui/react-toast'],
-          // Utilities
-          'utils-vendor': ['clsx', 'tailwind-merge', 'date-fns'],
+          'vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui': ['@radix-ui/react-dialog', '@radix-ui/react-popover', '@radix-ui/react-toast'],
         },
       },
     },
-    // Speed up Netlify build
-    target: 'es2018',
+    // Use stable target for Netlify
+    target: 'es2019',
   },
   plugins: [
     react({
-      // Remove fastRefresh as it's not a valid option
       devTarget: 'es2022',
       tsDecorators: true,
     }),
