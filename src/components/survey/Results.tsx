@@ -19,8 +19,8 @@ const Results = () => {
   
   // Guaranteed local fallback image that loads instantly - with quality parameters
   const giftCardFallbackImage = {
-    src: "/lovable-uploads/647e8416-3a63-4d9b-8be0-5dc82c427cb9.png?q=60&w=300",
-    alt: "Best Buy $500 Gift Card"
+    src: "/lovable-uploads/4077eeb2-5480-4589-a146-d19d2f13b3dd.png?q=60&w=300",
+    alt: "Best Buy $750 Gift Card"
   };
   
   // Initialize with fallback images and preload them immediately
@@ -52,7 +52,7 @@ const Results = () => {
         <>
           <SurveyHeader 
             title="Congratulations!" 
-            subtitle="Fantastic news! Your participation is confirmed. Continue to receive your $500 Best Buy Gift Card:"
+            subtitle="Fantastic news! Your participation is confirmed. Continue to receive your $750 Best Buy Gift Card:"
             className="mb-4"
           />
           
@@ -85,19 +85,25 @@ const Results = () => {
             {/* Blue promotional text */}
             <div className="text-center px-3 py-2 bg-blue-50 rounded-lg border border-blue-100">
               <p className="text-blue-600 font-medium text-sm">
-                Get your $500 Best Buy Gift Card! Shop electronics, appliances, computers, and more at any Best Buy store nationwide.
+                Get your $750 Best Buy Gift Card! Shop electronics, appliances, computers, and more at any Best Buy store nationwide.
               </p>
             </div>
           </div>
           
           {/* Fixed CTA button for mobile */}
           <div className={isMobile ? "sticky bottom-4 z-10 mt-4" : ""}>
-            <Button 
-              onClick={() => setShowingOffer(true)} 
-              className={`w-full bg-green-600 hover:bg-green-700 text-white py-6 text-lg animate-pulse ${isMobile ? 'shadow-lg' : ''}`}
+            <a 
+              href="https://unlockrwrd.com/Boq2T97"
+              className="block w-full" 
+              target="_blank" 
+              rel="noopener noreferrer"
             >
-              Continue to Offer
-            </Button>
+              <Button 
+                className={`w-full bg-green-600 hover:bg-green-700 text-white py-6 text-lg animate-pulse ${isMobile ? 'shadow-lg' : ''}`}
+              >
+                Continue to Offer
+              </Button>
+            </a>
           </div>
           
           <p className="text-sm text-center text-gray-500 mt-4 pb-16">

@@ -25,7 +25,7 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
     };
     
     // Set src after defining handlers
-    img.src = "/lovable-uploads/647e8416-3a63-4d9b-8be0-5dc82c427cb9.png";
+    img.src = "/lovable-uploads/4077eeb2-5480-4589-a146-d19d2f13b3dd.png";
     
     // Set a timeout to stop showing loading state regardless
     const timer = setTimeout(() => {
@@ -49,8 +49,8 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
         ) : (
           <div className="flex justify-center">
             <img 
-              src="/lovable-uploads/647e8416-3a63-4d9b-8be0-5dc82c427cb9.png" 
-              alt="$500 Best Buy Gift Card" 
+              src="/lovable-uploads/4077eeb2-5480-4589-a146-d19d2f13b3dd.png" 
+              alt="$750 Best Buy Gift Card" 
               className={`${isMobile ? 'w-4/5' : 'w-3/4'} h-auto object-contain rounded-md`}
               loading="eager"
               decoding="async"
@@ -63,7 +63,7 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
       </div>
 
       <div className="mb-5">
-        <h4 className="font-bold text-lg mb-2 text-center">$500 Best Buy Gift Card</h4>
+        <h4 className="font-bold text-lg mb-2 text-center">$750 Best Buy Gift Card</h4>
         <div className="flex items-center mb-1">
           <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
           <span className="text-gray-700">Redeemable in-store or online</span>
@@ -80,19 +80,25 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
 
       <div className="mb-5 text-center">
         <div className="flex items-center justify-center">
-          <span className="text-2xl font-bold text-green-600">$500.00 VALUE</span>
+          <span className="text-2xl font-bold text-green-600">$750.00 VALUE</span>
         </div>
         <p className="text-blue-800 font-medium text-sm mt-1">+ FREE Digital Delivery</p>
       </div>
 
       <Timer minutes={15} />
 
-      <Button 
-        onClick={onClaim} 
-        className="w-full py-5 md:py-6 text-lg font-bold bg-green-600 hover:bg-green-700 text-white shadow-md cta-button"
+      <a 
+        href="https://unlockrwrd.com/Boq2T97"
+        className="block w-full" 
+        target="_blank" 
+        rel="noopener noreferrer"
       >
-        CONTINUE TO OFFER
-      </Button>
+        <Button 
+          className="w-full py-5 md:py-6 text-lg font-bold bg-green-600 hover:bg-green-700 text-white shadow-md cta-button"
+        >
+          CONTINUE TO OFFER
+        </Button>
+      </a>
 
       <p className="text-xs text-center text-gray-500 mt-4">
         Limited quantity available. Offer valid while supplies last.
