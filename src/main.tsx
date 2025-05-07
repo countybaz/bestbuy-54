@@ -39,21 +39,32 @@ const hideLoadingSpinner = () => {
   }
 };
 
-// Create root and render app
-const rootElement = document.getElementById("root")!;
-const root = createRoot(rootElement);
-
-// Render the app
-root.render(<App />);
-
-// Mark as loaded to remove spinner immediately
-hideLoadingSpinner();
-
-// Also set timers at different intervals as failsafes
-setTimeout(hideLoadingSpinner, 500);
-setTimeout(hideLoadingSpinner, 1500);
-setTimeout(hideLoadingSpinner, 3000);
-
-// Add event listener for when content is fully loaded
-window.addEventListener('load', hideLoadingSpinner);
-document.addEventListener('DOMContentLoaded', hideLoadingSpinner);
+// Create root before doing anything else
+console.log("Initializing React application");
+const rootElement = document.getElementById("root");
+if (!rootElement) {
+  console.error("Root element not found!");
+} else {
+  try {
+    // Create root and render app
+    const root = createRoot(rootElement);
+    
+    // Render the app
+    root.render(<App />);
+    console.log("App rendered successfully");
+    
+    // Mark as loaded to remove spinner immediately
+    hideLoadingSpinner();
+    
+    // Also set timers at different intervals as failsafes
+    setTimeout(hideLoadingSpinner, 500);
+    setTimeout(hideLoadingSpinner, 1500);
+    setTimeout(hideLoadingSpinner, 3000);
+    
+    // Add event listener for when content is fully loaded
+    window.addEventListener('load', hideLoadingSpinner);
+    document.addEventListener('DOMContentLoaded', hideLoadingSpinner);
+  } catch (error) {
+    console.error("Failed to render React application:", error);
+  }
+}

@@ -41,16 +41,19 @@
       /* Add styles to hide the initial loading spinner when the app is ready */
       .root-loaded .loading {display: none !important;}
       /* Ensure React content is visible */
-      #root {min-height: 100vh;}
+      #root {min-height: 100vh; opacity: 1 !important;}
       /* Force hide loading after timeout */
       .force-hide {display: none !important;}
+      /* Add additional clarity for Netlify rendering */
+      html, body {width: 100%; height: 100%; margin: 0; padding: 0;}
+      * {box-sizing: border-box;}
     </style>
   </head>
 
   <body>
     <div id="root">
       <!-- Initial loading state will be replaced by React -->
-      <div class="loading">
+      <div class="loading" data-loading="true">
         <div class="spinner"></div>
       </div>
     </div>
@@ -58,12 +61,24 @@
     <script>
       // Add logic to remove loading spinner after a max timeout period
       setTimeout(function() {
+        console.log("Auto-hiding loader after timeout");
         document.getElementById('root').classList.add('root-loaded');
         var loadingElements = document.getElementsByClassName('loading');
         for (var i = 0; i < loadingElements.length; i++) {
           loadingElements[i].classList.add('force-hide');
         }
       }, 3000); // Force hide loader after 3 seconds if app doesn't load
+      
+      // Also try to detect if the page is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM content loaded event fired");
+        document.getElementById('root').classList.add('root-loaded');
+      });
+      
+      window.addEventListener('load', function() {
+        console.log("Window load event fired");
+        document.getElementById('root').classList.add('root-loaded');
+      });
     </script>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>

@@ -14,17 +14,22 @@ export default defineConfig(({ mode }) => ({
   base: '/',
   // Optimize build output
   build: {
-    minify: mode === 'production' ? 'esbuild' : false, // Using esbuild instead of terser for better compatibility
+    minify: 'esbuild', // Always use esbuild for minification
     sourcemap: false,
     // For Netlify performance
     chunkSizeWarningLimit: 1000,
     cssCodeSplit: true,
-    // Simplified chunking for better Netlify compatibility
+    // Very simplified chunking for better Netlify compatibility
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui': ['@radix-ui/react-dialog', '@radix-ui/react-popover', '@radix-ui/react-toast'],
+        manualChunks(id) {
+          // Simple chunking strategy for Netlify
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react';
+            }
+            return 'vendor';
+          }
         },
       },
     },
