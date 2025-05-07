@@ -62,6 +62,12 @@
       </noscript>
     </div>
 
+    <!-- Essential for Select feature -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    
+    <!-- Main application script -->
+    <script type="module" src="/src/main.tsx"></script>
+    
     <!-- Scripts -->
     <script>
       // Simple function to check if the page is loaded
@@ -72,7 +78,6 @@
       
       // Function to hide loading spinner
       function hideLoader() {
-        console.log("Hiding loader...");
         var loaders = document.querySelectorAll('.loading');
         loaders.forEach(function(loader) {
           if (loader && loader.parentNode) {
@@ -99,11 +104,5 @@
         }
       }, 100);
     </script>
-    
-    <!-- Essential for Select feature -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    
-    <!-- Main application script -->
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

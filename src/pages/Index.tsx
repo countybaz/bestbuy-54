@@ -76,7 +76,6 @@ const HeaderContent = () => {
           width="64"
           height="64"
           loading="eager"
-          // Fix case sensitivity for fetchPriority
           fetchPriority="high"
         />
       </div>

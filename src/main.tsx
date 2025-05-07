@@ -5,7 +5,6 @@ import './index.css'
 
 // Remove loading spinner and show content
 const hideLoadingSpinner = () => {
-  console.log("Removing loading spinner");
   const rootElement = document.getElementById("root");
   if (rootElement) {
     rootElement.classList.add('root-loaded');

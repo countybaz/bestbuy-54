@@ -35,22 +35,46 @@ const PageLoader = () => (
   </div>
 );
 
-const App = () => {
-  // Hide loading spinner when App component mounts
-  useEffect(() => {
-    // Mark as loaded to remove spinner
-    const rootElement = document.getElementById("root");
-    if (rootElement) {
-      rootElement.classList.add('root-loaded');
-    }
-    
-    // Remove any dedicated loading elements
-    const loadingElements = document.getElementsByClassName('loading');
+const hideLoadingSpinner = () => {
+  // Mark as loaded to remove spinner
+  const rootElement = document.getElementById("root");
+  if (rootElement) {
+    rootElement.classList.add('root-loaded');
+  }
+  
+  // Remove any dedicated loading elements
+  const loadingElements = document.getElementsByClassName('loading');
+  if (loadingElements && loadingElements.length > 0) {
     for (let i = 0; i < loadingElements.length; i++) {
-      if (loadingElements[i].parentNode) {
+      if (loadingElements[i] && loadingElements[i].parentNode) {
         loadingElements[i].classList.add('force-hide');
       }
     }
+  }
+};
+
+const App = () => {
+  // Hide loading spinner when App component mounts
+  useEffect(() => {
+    // Hide spinner immediately
+    hideLoadingSpinner();
+
+    // Also set a timeout as a backup
+    setTimeout(hideLoadingSpinner, 300);
+    
+    // Use MutationObserver to watch for root content changes
+    const observer = new MutationObserver(() => {
+      if (document.getElementById("root")?.children.length > 1) {
+        hideLoadingSpinner();
+      }
+    });
+    
+    observer.observe(document.getElementById("root") || document.body, {
+      childList: true,
+      subtree: true
+    });
+    
+    return () => observer.disconnect();
   }, []);
 
   return (

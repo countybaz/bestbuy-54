@@ -40,16 +40,20 @@ const SurveyContainer = () => {
 
   // Prefetch next steps
   useEffect(() => {
-    // Prefetch the next step component
-    if (currentStep === 0) {
-      const prefetchStep1 = import("@/components/survey/Step1");
-      const prefetchStep2 = import("@/components/survey/Step2");
-    } else if (currentStep === 1) {
-      const prefetchStep2 = import("@/components/survey/Step2");
-      const prefetchStep3 = import("@/components/survey/Step3");
-    } else if (currentStep === 2) {
-      const prefetchStep3 = import("@/components/survey/Step3");
-      const prefetchStep4 = import("@/components/survey/Step4");
+    try {
+      // Prefetch the next step component
+      if (currentStep === 0) {
+        const prefetchStep1 = import("@/components/survey/Step1");
+        const prefetchStep2 = import("@/components/survey/Step2");
+      } else if (currentStep === 1) {
+        const prefetchStep2 = import("@/components/survey/Step2");
+        const prefetchStep3 = import("@/components/survey/Step3");
+      } else if (currentStep === 2) {
+        const prefetchStep3 = import("@/components/survey/Step3");
+        const prefetchStep4 = import("@/components/survey/Step4");
+      }
+    } catch (error) {
+      console.error("Error prefetching components:", error);
     }
   }, [currentStep]);
 

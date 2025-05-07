@@ -79,7 +79,6 @@ export const OptimizedImage = ({
       className={className}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
-      // Fix case sensitivity issue - from fetchpriority to fetchPriority
       fetchPriority={priority ? "high" : "auto"}
       onError={() => {
         if (fallbackSrc && !error) {
