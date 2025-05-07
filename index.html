@@ -5,20 +5,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Best Buy Review Program</title>
-    <meta name="description" content="Participate in the Best Buy Review Program and earn a $500 gift card!" />
+    <meta name="description" content="Participate in the Best Buy Review Program and earn a $750 gift card!" />
     <meta name="author" content="Best Buy Review Program" />
     
+    <!-- Preload critical resources -->
     <link rel="preload" href="/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png" as="image" type="image/png" fetchpriority="high" />
     <link rel="icon" href="/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png" type="image/png">
 
-    <meta property="og:title" content="Best Buy Review Program - Get Your $500 Gift Card!" />
-    <meta property="og:description" content="Take our quick survey and qualify for a $500 Best Buy gift card" />
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Best Buy Review Program - Get Your $750 Gift Card!" />
+    <meta property="og:description" content="Take our quick survey and qualify for a $750 Best Buy gift card" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:image" content="/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png" />
 
+    <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:image" content="/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png" />
     
     <!-- Critical CSS inline - minimal styles needed for initial render -->
     <style>
@@ -35,17 +38,48 @@
       .cta-button{background-color:#ffe000 !important;color:#0046be !important;font-weight:bold !important;transform:scale(1);transition:transform 0.2s;}
       .cta-button:hover{transform:scale(1.02);}
       @media (max-width:640px){.mobile-fixed-cta{position:fixed;bottom:0;left:0;right:0;padding:10px;background:rgba(255,255,255,0.95);box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:50;}}
+      /* Add styles to hide the initial loading spinner when the app is ready */
+      .root-loaded .loading {display: none !important;}
+      /* Ensure React content is visible */
+      #root {min-height: 100vh; opacity: 1 !important;}
+      /* Force hide loading after timeout */
+      .force-hide {display: none !important;}
+      /* Add additional clarity for Netlify rendering */
+      html, body {width: 100%; height: 100%; margin: 0; padding: 0;}
+      * {box-sizing: border-box;}
     </style>
   </head>
 
   <body>
     <div id="root">
       <!-- Initial loading state will be replaced by React -->
-      <div class="loading">
+      <div class="loading" data-loading="true">
         <div class="spinner"></div>
       </div>
     </div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <!-- Scripts -->
+    <script>
+      // Add logic to remove loading spinner after a max timeout period
+      setTimeout(function() {
+        console.log("Auto-hiding loader after timeout");
+        document.getElementById('root').classList.add('root-loaded');
+        var loadingElements = document.getElementsByClassName('loading');
+        for (var i = 0; i < loadingElements.length; i++) {
+          loadingElements[i].classList.add('force-hide');
+        }
+      }, 3000); // Force hide loader after 3 seconds if app doesn't load
+      
+      // Also try to detect if the page is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM content loaded event fired");
+        document.getElementById('root').classList.add('root-loaded');
+      });
+      
+      window.addEventListener('load', function() {
+        console.log("Window load event fired");
+        document.getElementById('root').classList.add('root-loaded');
+      });
+    </script>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
