@@ -77,7 +77,7 @@ const HeaderContent = () => {
           width="64"
           height="64"
           loading="eager"
-          fetchPriority="high"
+          fetchpriority="high"
         />
       </div>
       <h1 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold text-yellow-400`}>Best Buy Review Program</h1>

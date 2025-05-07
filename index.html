@@ -38,6 +38,8 @@
       .cta-button{background-color:#ffe000 !important;color:#0046be !important;font-weight:bold !important;transform:scale(1);transition:transform 0.2s;}
       .cta-button:hover{transform:scale(1.02);}
       @media (max-width:640px){.mobile-fixed-cta{position:fixed;bottom:0;left:0;right:0;padding:10px;background:rgba(255,255,255,0.95);box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:50;}}
+      /* Add styles to hide the initial loading spinner when the app is ready */
+      .root-loaded .loading {display: none;}
     </style>
   </head>
 
@@ -48,7 +50,13 @@
         <div class="spinner"></div>
       </div>
     </div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <!-- Scripts -->
+    <script>
+      // Add logic to remove loading spinner after a max timeout period
+      setTimeout(function() {
+        document.getElementById('root').classList.add('root-loaded');
+      }, 5000); // Force hide loader after 5 seconds if app doesn't load
+    </script>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>

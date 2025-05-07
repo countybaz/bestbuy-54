@@ -10,10 +10,14 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  // Netlify specific adjustments - set base for proper path resolution
+  base: '/',
   // Optimize build output
   build: {
     minify: mode === 'production' ? 'terser' : 'esbuild',
     sourcemap: false,
+    // For Netlify performance
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks: {
