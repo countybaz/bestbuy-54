@@ -79,7 +79,7 @@ export const OptimizedImage = ({
       className={className}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
-      fetchpriority={priority ? "high" : "auto"}
+      fetchPriority={priority ? "high" : "auto"}
       onError={() => {
         if (fallbackSrc && !error) {
           setImageSrc(fallbackSrc);
