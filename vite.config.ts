@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => ({
   },
   // Optimize build output
   build: {
-    minify: 'terser',
+    minify: mode === 'production' ? 'terser' : 'esbuild',
     sourcemap: false,
     rollupOptions: {
       output: {
