@@ -24,7 +24,7 @@ const Step2 = () => {
       />
       
       <div className="mb-6">
-        <h2 className="text-lg font-medium mb-4">How important is it for you to keep your gadgets up to date?</h2>
+        <h2 className="text-lg font-medium mb-4">How important is product quality when you shop at Best Buy?</h2>
         <div className="space-y-3">
           <SurveyOption 
             label="Very important" 
@@ -47,7 +47,7 @@ const Step2 = () => {
       <Button 
         onClick={handleNext} 
         disabled={!selected}
-        className="w-full bg-blue-600 hover:bg-blue-700 py-6 md:py-4 text-lg shadow-lg md:shadow-none fixed bottom-4 left-4 right-4 md:relative md:bottom-auto md:left-auto md:right-auto z-10 max-w-full mx-auto"
+        className="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-900 py-6 md:py-4 text-lg font-bold shadow-lg md:shadow-none fixed bottom-4 left-4 right-4 md:relative md:bottom-auto md:left-auto md:right-auto z-10 max-w-full mx-auto cta-button"
       >
         Continue
       </Button>

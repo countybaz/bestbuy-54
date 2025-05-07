@@ -70,6 +70,9 @@ const SurveyContainer = () => {
           <FacebookReviews />
         </Suspense>
       )}
+      
+      {/* Add extra padding at bottom on mobile to ensure buttons aren't covered */}
+      <div className="h-16 md:h-4"></div>
     </div>
   );
 };

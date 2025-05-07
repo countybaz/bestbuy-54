@@ -59,19 +59,19 @@ const Step5 = () => {
           <div className={`w-6 h-6 rounded-full mr-3 flex items-center justify-center ${checks.rewards ? 'bg-green-500 text-white' : 'bg-gray-200'}`}>
             {checks.rewards && <Check className="w-4 h-4" />}
           </div>
-          <p className="text-lg">Only 15 Rewards left</p>
+          <p className="text-lg">Only 15 Gift Cards left</p>
         </div>
         
         <div className="flex items-center">
           <div className={`w-6 h-6 rounded-full mr-3 flex items-center justify-center ${checks.reserved ? 'bg-green-500 text-white' : 'bg-gray-200'}`}>
             {checks.reserved && <Check className="w-4 h-4" />}
           </div>
-          <p className="text-lg">Your place is reserved until the timer runs out</p>
+          <p className="text-lg">Your $500 gift card is reserved until the timer runs out</p>
         </div>
       </div>
 
       <div className="w-full bg-gray-100 rounded-md h-2 mt-6">
-        <div className="bg-blue-600 h-2 rounded-md animate-pulse" style={{ width: '100%' }}></div>
+        <div className="bg-blue-800 h-2 rounded-md animate-pulse" style={{ width: '100%' }}></div>
       </div>
       
       <p className="text-center text-sm text-gray-500 mt-2 mb-6">Processing your information...</p>
@@ -79,7 +79,7 @@ const Step5 = () => {
       {/* Added manual continue button for mobile users */}
       <Button 
         onClick={goToNextStep} 
-        className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg fixed bottom-4 left-4 right-4 md:relative md:bottom-auto md:left-auto md:right-auto md:py-4 z-10 max-w-full mx-auto shadow-lg md:shadow-none"
+        className="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-900 py-6 text-lg font-bold fixed bottom-4 left-4 right-4 md:relative md:bottom-auto md:left-auto md:right-auto md:py-4 z-10 max-w-full mx-auto shadow-lg md:shadow-none cta-button"
       >
         Continue
       </Button>

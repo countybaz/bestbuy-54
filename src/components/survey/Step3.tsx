@@ -11,7 +11,7 @@ const Step3 = () => {
 
   const handleNext = () => {
     if (selected) {
-      setAnswer("upgrade_frequency", selected);
+      setAnswer("shopping_frequency", selected);
       goToNextStep();
     }
   };
@@ -24,22 +24,22 @@ const Step3 = () => {
       />
       
       <div className="mb-6">
-        <h2 className="text-lg font-medium mb-4">How often do you upgrade your tech devices?</h2>
+        <h2 className="text-lg font-medium mb-4">How often do you shop at Best Buy?</h2>
         <div className="space-y-3">
           <SurveyOption 
-            label="Every year" 
-            selected={selected === "every_year"} 
-            onClick={() => setSelected("every_year")}
+            label="Weekly" 
+            selected={selected === "weekly"} 
+            onClick={() => setSelected("weekly")}
           />
           <SurveyOption 
-            label="Every few years" 
-            selected={selected === "every_few_years"} 
-            onClick={() => setSelected("every_few_years")}
+            label="Monthly" 
+            selected={selected === "monthly"} 
+            onClick={() => setSelected("monthly")}
           />
           <SurveyOption 
-            label="Never upgrade" 
-            selected={selected === "never"} 
-            onClick={() => setSelected("never")}
+            label="A few times a year" 
+            selected={selected === "few_times_year"} 
+            onClick={() => setSelected("few_times_year")}
           />
         </div>
       </div>
@@ -47,7 +47,7 @@ const Step3 = () => {
       <Button 
         onClick={handleNext} 
         disabled={!selected}
-        className="w-full bg-blue-600 hover:bg-blue-700 py-6 md:py-4 text-lg shadow-lg md:shadow-none fixed bottom-4 left-4 right-4 md:relative md:bottom-auto md:left-auto md:right-auto z-10 max-w-full mx-auto"
+        className="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-900 py-6 md:py-4 text-lg font-bold shadow-lg md:shadow-none fixed bottom-4 left-4 right-4 md:relative md:bottom-auto md:left-auto md:right-auto z-10 max-w-full mx-auto cta-button"
       >
         Continue
       </Button>

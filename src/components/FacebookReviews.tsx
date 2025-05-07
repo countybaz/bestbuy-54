@@ -29,54 +29,54 @@ const FacebookReviews = () => {
   // Store which reviews will have replies (3 random ones instead of 5)
   const [reviewsWithReplies, setReviewsWithReplies] = useState<number[]>([]);
 
-  // Define all reviews in one array - fixed image paths by removing "public/" prefix
+  // Define all reviews in one array - updated for Best Buy content
   const allReviews: Review[] = [{
     name: "Sarah Johnson",
     avatar: "https://i.pravatar.cc/40?img=1",
     time: "2 hours ago",
-    text: "I just received my iPhone 16 Pro Max! The survey was super easy and shipping was fast. So happy with this program!",
+    text: "Just received my $500 Best Buy gift card! The survey was quick and easy, and now I can buy that new laptop I've been eyeing. Thanks Best Buy Review Program!",
     likes: 24,
     comments: 2,
-    images: ["/lovable-uploads/b6217fe5-8f9c-4a38-a029-a7f143e799b0.png"]
+    images: []
   }, {
     name: "Michael Thomas",
     avatar: "https://i.pravatar.cc/40?img=5",
     time: "Yesterday",
-    text: "This is legit! Was skeptical at first but decided to try anyway. Got my new iPhone in just 3 days after completing the survey. Amazing service!",
+    text: "This is legit! Was skeptical at first but decided to try anyway. Got my $500 gift card through email just 2 days after completing the survey. Already spent half of it on a new gaming headset and controller!",
     likes: 42,
     comments: 5,
-    images: ["/lovable-uploads/7839869b-e3e7-40a5-8fe4-5f64abc350a8.png"]
+    images: []
   }, {
     name: "Jessica Williams",
     avatar: "https://i.pravatar.cc/40?img=8",
     time: "2 days ago",
-    text: "Just wow! Survey took less than 5 minutes and the iPhone arrived perfectly packaged. My old phone was dying so this came at the perfect time!",
+    text: "Just wow! Survey took less than 5 minutes and the gift card arrived in my email the next day. My daughter needed a new tablet for school so this came at the perfect time!",
     likes: 19,
     comments: 1,
-    images: ["/lovable-uploads/21efaadd-c4fe-4381-98db-b5e3524d9aec.png"]
+    images: []
   }, {
     name: "Robert Chen",
     avatar: "https://i.pravatar.cc/40?img=12",
     time: "3 days ago",
-    text: "The whole process was surprisingly simple. I completed the survey during lunch break and received confirmation immediately. Phone arrived few days later. 10/10 would recommend!",
+    text: "The whole process was surprisingly simple. I completed the survey and received my Best Buy gift card 48 hours later. I've already picked out a new smart TV I'm going to buy this weekend!",
     likes: 38,
     comments: 3,
-    images: ["/lovable-uploads/6efbd04b-9843-49a8-bd07-700d5e08c2b1.png"]
+    images: []
   }, {
     name: "Amanda Rodriguez",
     avatar: "https://i.pravatar.cc/40?img=22",
     time: "Last week",
-    text: "Best decision ever! My iPhone arrived in perfect condition and I love all the new features. The Ultimate Phone Program is amazing - thank you so much!",
+    text: "Best decision ever! The $500 Best Buy gift card came through exactly as promised. I bought a new laptop for college and still have money left over for accessories. Thank you Best Buy Review Program!",
     likes: 57,
     comments: 7,
-    images: ["/lovable-uploads/e8ded452-0d3c-44c9-8312-b92eea2579ef.png"]
+    images: []
   },
   // Adding text-only reviews 
   {
     name: "Emma Peterson",
     avatar: "https://i.pravatar.cc/40?img=3",
     time: "4 days ago",
-    text: "Thought it was too good to be true, but I'm literally typing this from my new iPhone 16 Pro Max! The screen is gorgeous and the battery life is insane compared to my old phone.",
+    text: "Thought it was too good to be true, but I'm literally typing this on my new laptop that I got with the $500 gift card. The program is 100% legitimate and I'm so happy I participated!",
     likes: 21,
     comments: 3,
     images: []
@@ -84,7 +84,7 @@ const FacebookReviews = () => {
     name: "Liam Johnson",
     avatar: "https://i.pravatar.cc/40?img=10",
     time: "5 days ago",
-    text: "So grateful for this opportunity! My old phone was on its last legs. The survey was straightforward and my new iPhone came in the mail just 4 days later.",
+    text: "So grateful for this opportunity! Our kitchen appliances were on their last legs. The survey was straightforward and now we have $500 to put toward new ones at Best Buy!",
     likes: 17,
     comments: 2,
     images: []
@@ -92,7 +92,7 @@ const FacebookReviews = () => {
     name: "Olivia Rodriguez",
     avatar: "https://i.pravatar.cc/40?img=16",
     time: "Last week",
-    text: "My friends didn't believe me when I told them about this program, but now they're all signing up after seeing my new iPhone 16 Pro Max! The camera is AMAZING.",
+    text: "My friends didn't believe me when I told them about this program, but now they're all signing up after I showed them my new sound system that I got with the $500 Best Buy gift card!",
     likes: 29,
     comments: 5,
     images: []
@@ -100,7 +100,7 @@ const FacebookReviews = () => {
     name: "Noah Martinez",
     avatar: "https://i.pravatar.cc/40?img=20",
     time: "Last week",
-    text: "Just got my iPhone 16 Pro Max yesterday. The setup was quick and all my data transferred perfectly. This phone is seriously impressive!",
+    text: "Just used my $500 Best Buy gift card yesterday. Bought a new monitor and wireless earbuds. The whole process from survey to getting the gift card took less than a week!",
     likes: 15,
     comments: 1,
     images: []
@@ -108,7 +108,7 @@ const FacebookReviews = () => {
     name: "Ava Thompson",
     avatar: "https://i.pravatar.cc/40?img=23",
     time: "2 weeks ago",
-    text: "After my last phone broke, I couldn't afford a replacement. This program was a lifesaver! The iPhone 16 Pro Max is way better than anything I've had before.",
+    text: "After my laptop broke, I couldn't afford a replacement. This program was a lifesaver! Now I have a brand new one thanks to the $500 Best Buy gift card I received.",
     likes: 33,
     comments: 4,
     images: []
@@ -116,7 +116,7 @@ const FacebookReviews = () => {
     name: "Ethan Wright",
     avatar: "https://i.pravatar.cc/40?img=33",
     time: "3 weeks ago",
-    text: "I was hesitant but decided to try it anyway. So glad I did! The whole process was smooth and I got my new iPhone right on time as promised.",
+    text: "I was hesitant but decided to try it anyway. So glad I did! Got my $500 gift card and bought that camera I've been wanting forever. The whole process was smooth from start to finish.",
     likes: 41,
     comments: 6,
     images: []
@@ -216,7 +216,16 @@ const FacebookReviews = () => {
 
   // Get a unique response for a specific review
   const getUniqueResponse = (index: number, reviewName: string) => {
-    const responses = [`Thanks for sharing your experience, ${reviewName}! 😊 We're thrilled you're enjoying your new iPhone 16 Pro Max. Our team works hard to make shipping as fast as possible!`, `We really appreciate your feedback, ${reviewName}! The iPhone 16 Pro Max is indeed a fantastic device, and we're delighted it arrived in perfect condition.`, `Thank you so much for your kind words, ${reviewName}! We're committed to making this program accessible to everyone who qualifies. Enjoy all the amazing features!`, `We're so glad to hear about your positive experience, ${reviewName}! Our goal is to make the survey process as simple as possible. Thank you for being part of our program!`, `Your satisfaction means everything to us, ${reviewName}! We're happy that the iPhone 16 Pro Max meets your expectations. Don't hesitate to reach out if you have any questions!`, `Thanks for trusting our program, ${reviewName}! Many people are skeptical at first, but we're dedicated to delivering quality devices to all our qualified participants.`, `We love hearing success stories like yours, ${reviewName}! The iPhone 16 Pro Max camera is indeed impressive. Thanks for sharing your experience with our community!`, `Thank you for your wonderful feedback, ${reviewName}! We're glad the setup process was smooth and you're enjoying your new device. That's exactly what we aim for!`];
+    const responses = [
+      `Thanks for sharing your experience, ${reviewName}! 😊 We're thrilled you're enjoying your Best Buy gift card. Our team works hard to make the process as simple as possible!`, 
+      `We really appreciate your feedback, ${reviewName}! The $500 gift card can be used on thousands of products, and we're delighted you found something perfect for you.`, 
+      `Thank you so much for your kind words, ${reviewName}! We're committed to making this program accessible to everyone who qualifies. Enjoy your new purchases!`, 
+      `We're so glad to hear about your positive experience, ${reviewName}! Our goal is to make the survey process as simple as possible. Thank you for being part of our program!`, 
+      `Your satisfaction means everything to us, ${reviewName}! We're happy that the Best Buy Review Program met your expectations. Don't hesitate to reach out if you have any questions!`, 
+      `Thanks for trusting our program, ${reviewName}! Many people are skeptical at first, but we're dedicated to delivering real rewards to all our qualified participants.`, 
+      `We love hearing success stories like yours, ${reviewName}! Best Buy has so many great products to choose from. Thanks for sharing your experience with our community!`, 
+      `Thank you for your wonderful feedback, ${reviewName}! We're glad the redemption process was smooth and you're enjoying your new purchases. That's exactly what we aim for!`
+    ];
 
     // Use modulo to cycle through responses if there are more reviews than responses
     return responses[index % responses.length];
@@ -295,19 +304,19 @@ const FacebookReviews = () => {
             </div>
           </div>
           
-          {/* Ultimate Phone Program Replies - only show for randomly selected reviews */}
+          {/* Best Buy Review Program Replies - only show for randomly selected reviews */}
           {reviewsWithReplies.includes(index) && <div className="ml-10 mt-2 border-l-2 border-gray-200 pl-3">
               <div className="flex items-start">
                 <div className="relative">
                   <Avatar className="w-6 h-6 mr-2">
-                    <AvatarImage src="/lovable-uploads/8c90f432-da05-45a1-81f7-cdbbce1ef2e2.png" alt="Ultimate Phone Program" loading="eager" />
-                    <AvatarFallback>UPP</AvatarFallback>
+                    <AvatarImage src="/lovable-uploads/80114780-632f-4b11-9079-1fae1dfe040e.png" alt="Best Buy Review Program" loading="eager" />
+                    <AvatarFallback>BBRP</AvatarFallback>
                   </Avatar>
                   <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-2 h-2 border border-white"></div>
                 </div>
                 <div>
                   <div className="flex items-center gap-1">
-                    <h5 className="text-xs font-semibold text-[#3b5998]">Ultimate Phone Program</h5>
+                    <h5 className="text-xs font-semibold text-[#0046be]">Best Buy Review Program</h5>
                     <span className="text-[10px] bg-blue-100 text-blue-800 px-1 rounded">Verified</span>
                   </div>
                   <p className="text-xs mt-0.5">
@@ -327,7 +336,7 @@ const FacebookReviews = () => {
 
       {/* Show more link */}
       <div className="text-center mt-2">
-        <button className="text-blue-600 text-sm font-semibold" onClick={() => setShowAllReviews(!showAllReviews)}>
+        <button className="text-blue-800 text-sm font-semibold" onClick={() => setShowAllReviews(!showAllReviews)}>
           {showAllReviews ? 'Show less reviews' : 'Show more reviews'}
         </button>
       </div>
