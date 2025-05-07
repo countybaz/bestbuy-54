@@ -6,37 +6,17 @@ import ProductOffer from "@/components/ProductOffer";
 import SurveyHeader from "@/components/SurveyHeader";
 import { useToast } from "@/components/ui/use-toast";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import IPhoneImageFetcher from "@/components/IPhoneImageFetcher";
 import { useIsMobile } from "@/hooks/use-mobile";
+import OptimizedImage from "@/components/OptimizedImage";
 
 const Results = () => {
   const { answers } = useSurvey();
   const { toast } = useToast();
   const [showingOffer, setShowingOffer] = useState(false);
-  const [giftCardImage, setGiftCardImage] = useState<{src: string, alt: string} | null>(null);
-  const [imagesLoading, setImagesLoading] = useState(true);
   const isMobile = useIsMobile();
   
-  // Guaranteed local fallback image that loads instantly - with quality parameters
-  const giftCardFallbackImage = {
-    src: "/lovable-uploads/4077eeb2-5480-4589-a146-d19d2f13b3dd.png?q=60&w=300",
-    alt: "Best Buy $750 Gift Card"
-  };
-  
-  // Initialize with fallback images and preload them immediately
-  useEffect(() => {
-    // Set fallback image right away
-    setGiftCardImage(giftCardFallbackImage);
-    
-    // Preload the image
-    const image = new Image();
-    image.onload = () => setImagesLoading(false);
-    image.onerror = () => setImagesLoading(false);
-    image.src = giftCardFallbackImage.src;
-    
-    // Fallback timeout to ensure loading state doesn't persist
-    setTimeout(() => setImagesLoading(false), 300);
-  }, []);
+  // Gift card image path
+  const giftCardPath = "/lovable-uploads/4077eeb2-5480-4589-a146-d19d2f13b3dd.png";
 
   const handleClaim = () => {
     toast({
@@ -61,22 +41,14 @@ const Results = () => {
               <div className="flex justify-center">
                 <div className={`${isMobile ? 'w-3/4' : 'w-1/2'} mx-auto`}>
                   <AspectRatio ratio={16/10}>
-                    {imagesLoading ? (
-                      <div className="w-full h-full bg-gray-50 rounded-md flex items-center justify-center">
-                        <div className="w-8 h-8 bg-gray-100"></div>
-                      </div>
-                    ) : (
-                      <img 
-                        src={giftCardImage?.src || giftCardFallbackImage.src}
-                        alt={giftCardImage?.alt || giftCardFallbackImage.alt}
-                        className="rounded-md object-contain w-full h-full"
-                        loading="eager"
-                        decoding="async"
-                        width="300"
-                        height="188"
-                        fetchPriority="high"
-                      />
-                    )}
+                    <OptimizedImage
+                      src={giftCardPath}
+                      alt="$750 Best Buy Gift Card"
+                      width={300}
+                      height={188}
+                      className="rounded-md object-contain w-full h-full"
+                      priority={true}
+                    />
                   </AspectRatio>
                 </div>
               </div>

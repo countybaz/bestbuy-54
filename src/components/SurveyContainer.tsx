@@ -12,12 +12,13 @@ import Step1 from "@/components/survey/Step1";
 // Lazy load less critical components
 const Step2 = lazy(() => import("@/components/survey/Step2"));
 const Step3 = lazy(() => import("@/components/survey/Step3"));
+const Step4 = lazy(() => import("@/components/survey/Step4"));
 const Step5 = lazy(() => import("@/components/survey/Step5"));
 const Results = lazy(() => import("@/components/survey/Results"));
 const RejectionPage = lazy(() => import("@/components/survey/RejectionPage"));
 const FacebookReviews = lazy(() => import("@/components/FacebookReviews"));
 
-// Loading fallback
+// Loading fallbacks
 const StepLoader = () => (
   <div className="space-y-4 p-4">
     <Skeleton className="w-full h-12" />
@@ -36,6 +37,21 @@ const ReviewsLoader = () => (
 
 const SurveyContainer = () => {
   const { currentStep, totalSteps } = useSurvey();
+
+  // Prefetch next steps
+  useEffect(() => {
+    // Prefetch the next step component
+    if (currentStep === 0) {
+      const prefetchStep1 = import("@/components/survey/Step1");
+      const prefetchStep2 = import("@/components/survey/Step2");
+    } else if (currentStep === 1) {
+      const prefetchStep2 = import("@/components/survey/Step2");
+      const prefetchStep3 = import("@/components/survey/Step3");
+    } else if (currentStep === 2) {
+      const prefetchStep3 = import("@/components/survey/Step3");
+      const prefetchStep4 = import("@/components/survey/Step4");
+    }
+  }, [currentStep]);
 
   // Scroll to top when step changes
   useEffect(() => {

@@ -1,15 +1,23 @@
+
 import { Button } from "@/components/ui/button";
 import SurveyHeader from "@/components/SurveyHeader";
 import { useSurvey } from "@/contexts/SurveyContext";
 import { ArrowRight } from "lucide-react";
-import FacebookReviews from "@/components/FacebookReviews";
+import { lazy, Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+// Lazy-load FacebookReviews for initial screen performance
+const FacebookReviews = lazy(() => import("@/components/FacebookReviews"));
+
 const StartScreen = () => {
   const {
     goToNextStep
   } = useSurvey();
+  
   const handleStart = () => {
     goToNextStep();
   };
+  
   return <div className="max-w-md mx-auto">
       <SurveyHeader title="Great news! You are among the first to join our Best Buy Review Program!" />
       
@@ -31,11 +39,14 @@ const StartScreen = () => {
         Start <ArrowRight className="ml-2" />
       </Button>
 
-      {/* Facebook Review Section - kept in the start screen */}
-      <FacebookReviews />
+      {/* Facebook Review Section - lazy loaded with Suspense */}
+      <Suspense fallback={<Skeleton className="w-full h-36 mt-6" />}>
+        <FacebookReviews />
+      </Suspense>
 
       {/* Add some space at the bottom */}
       <div className="h-10"></div>
     </div>;
 };
+
 export default StartScreen;

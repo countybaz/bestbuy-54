@@ -2,38 +2,15 @@
 import { Button } from "@/components/ui/button";
 import Timer from "@/components/Timer";
 import { Check } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from "@/hooks/use-mobile";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface ProductOfferProps {
   onClaim: () => void;
 }
 
 const ProductOffer = ({ onClaim }: ProductOfferProps) => {
-  const [imageLoading, setImageLoading] = useState<boolean>(true);
   const isMobile = useIsMobile();
-  
-  useEffect(() => {
-    // Preload the image
-    const img = new Image();
-    img.onload = () => {
-      setImageLoading(false);
-    };
-    img.onerror = () => {
-      setImageLoading(false);
-    };
-    
-    // Set src after defining handlers
-    img.src = "/lovable-uploads/4077eeb2-5480-4589-a146-d19d2f13b3dd.png";
-    
-    // Set a timeout to stop showing loading state regardless
-    const timer = setTimeout(() => {
-      setImageLoading(false);
-    }, 300);
-    
-    return () => clearTimeout(timer);
-  }, []);
   
   return (
     <div className="border border-gray-200 rounded-lg shadow-lg p-4 md:p-6 max-w-md mx-auto bg-white">
@@ -43,23 +20,17 @@ const ProductOffer = ({ onClaim }: ProductOfferProps) => {
       </div>
 
       <div className="mb-5">
-        {/* Display loading skeleton during image fetch */}
-        {imageLoading ? (
-          <Skeleton className="w-full h-40 md:h-48" />
-        ) : (
-          <div className="flex justify-center">
-            <img 
-              src="/lovable-uploads/4077eeb2-5480-4589-a146-d19d2f13b3dd.png" 
-              alt="$750 Best Buy Gift Card" 
-              className={`${isMobile ? 'w-4/5' : 'w-3/4'} h-auto object-contain rounded-md`}
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-              width="300"
-              height="188"
-            />
-          </div>
-        )}
+        <div className="flex justify-center">
+          <OptimizedImage
+            src="/lovable-uploads/4077eeb2-5480-4589-a146-d19d2f13b3dd.png"
+            alt="$750 Best Buy Gift Card"
+            width={300}
+            height={188}
+            className={`${isMobile ? 'w-4/5' : 'w-3/4'} h-auto object-contain rounded-md`}
+            priority={true}
+            quality={80}
+          />
+        </div>
       </div>
 
       <div className="mb-5">
