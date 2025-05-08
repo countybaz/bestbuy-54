@@ -45,6 +45,15 @@ const hideLoadingSpinner = () => {
         }
       });
 
+      // Apply additional force-remove styles
+      const style = document.createElement('style');
+      style.innerHTML = `
+        .loading, #initial-loader { display: none !important; opacity: 0 !important; }
+        body.fully-loaded .loading { display: none !important; }
+      `;
+      document.head.appendChild(style);
+      document.body.classList.add('fully-loaded');
+
     } catch (e) {
       console.error("Error removing loading elements:", e);
     }
@@ -81,7 +90,8 @@ const init = () => {
 init();
 
 // Also set backup timeouts to ensure spinner is removed
-setTimeout(hideLoadingSpinner, 300); // Quick first attempt
+setTimeout(hideLoadingSpinner, 100);  // Try immediately
+setTimeout(hideLoadingSpinner, 300);
 setTimeout(hideLoadingSpinner, 1000);
 setTimeout(hideLoadingSpinner, 2000);
 setTimeout(hideLoadingSpinner, 5000); // Extra long timeout for slow connections
@@ -90,7 +100,7 @@ setTimeout(hideLoadingSpinner, 5000); // Extra long timeout for slow connections
 window.addEventListener('load', hideLoadingSpinner);
 document.addEventListener('DOMContentLoaded', hideLoadingSpinner);
 
-// Final failsafe - always clear any loaders after 8 seconds
+// Final failsafe - always clear any loaders after 5 seconds
 setTimeout(() => {
   try {
     const initialLoader = document.getElementById('initial-loader');
@@ -101,7 +111,14 @@ setTimeout(() => {
     
     document.body.classList.add('fully-loaded');
     console.log("Failsafe loader removal triggered");
+    
+    // Force all content to be visible
+    const rootElement = document.getElementById("root");
+    if (rootElement) {
+      rootElement.style.opacity = '1';
+      rootElement.style.display = 'block';
+    }
   } catch (e) {
     console.error("Error in failsafe loader removal:", e);
   }
-}, 8000);
+}, 5000);
