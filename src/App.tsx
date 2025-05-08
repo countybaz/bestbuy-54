@@ -48,8 +48,16 @@ const hideLoadingSpinner = () => {
     for (let i = 0; i < loadingElements.length; i++) {
       if (loadingElements[i] && loadingElements[i].parentNode) {
         loadingElements[i].classList.add('force-hide');
+        loadingElements[i].parentNode.removeChild(loadingElements[i]);
       }
     }
+  }
+  
+  // Additionally, remove the initial loader if it exists
+  const initialLoader = document.getElementById('initial-loader');
+  if (initialLoader && initialLoader.parentNode) {
+    initialLoader.classList.add('force-hide');
+    initialLoader.parentNode.removeChild(initialLoader);
   }
 };
 
@@ -60,7 +68,8 @@ const App = () => {
     hideLoadingSpinner();
 
     // Also set a timeout as a backup
-    setTimeout(hideLoadingSpinner, 300);
+    setTimeout(hideLoadingSpinner, 100);
+    setTimeout(hideLoadingSpinner, 500);
     
     // Use MutationObserver to watch for root content changes
     const observer = new MutationObserver(() => {
@@ -73,8 +82,21 @@ const App = () => {
       childList: true,
       subtree: true
     });
+
+    // Add a final style to ensure no white overlay remains
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .loading { display: none !important; opacity: 0 !important; } 
+      #initial-loader { display: none !important; opacity: 0 !important; }
+      body.fully-loaded .loading { display: none !important; }
+    `;
+    document.head.appendChild(style);
+    document.body.classList.add('fully-loaded');
     
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      document.head.removeChild(style);
+    };
   }, []);
 
   return (

@@ -38,12 +38,17 @@
       @media (max-width:640px){.mobile-fixed-cta{position:fixed;bottom:0;left:0;right:0;padding:10px;background:rgba(255,255,255,0.95);box-shadow:0 -2px 10px rgba(0,0,0,0.1);z-index:50;}}
       .root-loaded .loading {display: none !important;}
       #root {min-height: 100vh; opacity: 1 !important;}
-      .force-hide {display: none !important;}
+      .force-hide {display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important;}
       html, body {width: 100%; height: 100%; margin: 0; padding: 0;}
       * {box-sizing: border-box;}
       /* Ensure content is visible even if JS fails */
       #root:empty + .loading { display: flex !important; }
       #root:not(:empty) ~ .loading { display: none !important; }
+      /* Smooth transitions for better UX */
+      .loading { transition: opacity 0.3s ease-out; }
+      .root-loaded { opacity: 1 !important; }
+      #initial-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: white; }
+      #root:not(:empty) #initial-loader { display: none !important; }
     </style>
   </head>
 
@@ -62,11 +67,11 @@
       </noscript>
     </div>
 
-    <!-- Essential for Select feature - placed before the main app script -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    
     <!-- Main application script -->
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Essential for Select feature - placed after the main script to avoid blocking -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     
     <!-- Scripts to ensure loading spinner is removed -->
     <script>
@@ -80,7 +85,7 @@
       function hideLoader() {
         var loaders = document.querySelectorAll('.loading');
         loaders.forEach(function(loader) {
-          if (loader && loader.parentNode) {
+          if (loader) {
             loader.style.display = 'none';
             loader.classList.add('force-hide');
           }
@@ -91,6 +96,7 @@
         if (initialLoader) {
           initialLoader.style.display = 'none';
           initialLoader.classList.add('force-hide');
+          initialLoader.parentNode && initialLoader.parentNode.removeChild(initialLoader);
         }
         
         document.getElementById('root').classList.add('root-loaded');
@@ -102,9 +108,9 @@
       });
       
       // Force hide loader after multiple timeouts (staggered)
+      setTimeout(hideLoader, 500);
       setTimeout(hideLoader, 1000);
       setTimeout(hideLoader, 2500);
-      setTimeout(hideLoader, 5000);
       
       // Check periodically if root has content
       var checkInterval = setInterval(function() {
@@ -113,6 +119,15 @@
           clearInterval(checkInterval);
         }
       }, 100);
+
+      // Final failsafe - always remove loader after 8 seconds no matter what
+      setTimeout(function() {
+        var initialLoader = document.getElementById('initial-loader');
+        if (initialLoader && initialLoader.parentNode) {
+          initialLoader.parentNode.removeChild(initialLoader);
+        }
+        document.body.classList.add('fully-loaded');
+      }, 8000);
     </script>
   </body>
 </html>
