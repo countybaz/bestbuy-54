@@ -62,13 +62,13 @@
       </noscript>
     </div>
 
-    <!-- Essential for Select feature -->
+    <!-- Essential for Select feature - placed before the main app script -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     
     <!-- Main application script -->
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Scripts -->
+    <!-- Scripts to ensure loading spinner is removed -->
     <script>
       // Simple function to check if the page is loaded
       function isPageLoaded() {
@@ -82,8 +82,16 @@
         loaders.forEach(function(loader) {
           if (loader && loader.parentNode) {
             loader.style.display = 'none';
+            loader.classList.add('force-hide');
           }
         });
+        
+        // Try to remove by ID as well
+        var initialLoader = document.getElementById('initial-loader');
+        if (initialLoader) {
+          initialLoader.style.display = 'none';
+          initialLoader.classList.add('force-hide');
+        }
         
         document.getElementById('root').classList.add('root-loaded');
       }
@@ -93,8 +101,10 @@
         window.addEventListener(event, hideLoader);
       });
       
-      // Force hide loader after a timeout
+      // Force hide loader after multiple timeouts (staggered)
+      setTimeout(hideLoader, 1000);
       setTimeout(hideLoader, 2500);
+      setTimeout(hideLoader, 5000);
       
       // Check periodically if root has content
       var checkInterval = setInterval(function() {

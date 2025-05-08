@@ -26,6 +26,12 @@ const hideLoadingSpinner = () => {
           el.parentNode.removeChild(el);
         }
       });
+      
+      // By id - specifically target the initial-loader
+      const initialLoader = document.getElementById('initial-loader');
+      if (initialLoader && initialLoader.parentNode) {
+        initialLoader.parentNode.removeChild(initialLoader);
+      }
     } catch (e) {
       console.error("Error removing loading elements:", e);
     }
@@ -62,6 +68,7 @@ init();
 // Also set backup timeouts to ensure spinner is removed
 setTimeout(hideLoadingSpinner, 500);
 setTimeout(hideLoadingSpinner, 1500);
+setTimeout(hideLoadingSpinner, 3000); // Add an extra long timeout for slow connections
 
 // Add standard event listeners
 window.addEventListener('load', hideLoadingSpinner);

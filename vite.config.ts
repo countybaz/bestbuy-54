@@ -30,6 +30,9 @@ export default defineConfig(({ mode }) => ({
     },
     // Compatible target for wider browser support
     target: 'es2018',
+    // Ensure _redirects file is copied to the build output
+    copyPublicDir: true,
+    emptyOutDir: true,
   },
   plugins: [
     react({
